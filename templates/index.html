@@ -3,27 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bodim-Link NCP</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            text-align: center;
-            padding: 50px;
-        }
-        h1 {
-            color: #2c3e50;
-        }
-        p {
-            color: #7f8c8d;
-        }
-    </style>
+    <title>Bodim-Link NCP - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=6) }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <h1>Welcome to Bodim-Link NCP!</h1>
-    <p>This is the starting point of our project. Backend and Frontend are connected.</p>
-    <p style="font-weight: bold; padding: 10px; border-radius: 5px; background: #e8f5e9; color: #2e7d32; display: inline-block;">
-        {{ db_status }}
-    </p>
+    <nav class="navbar">
+        <div class="nav-logo">
+            <i class="fa-solid fa-house-chimney"></i>
+            <div>
+                Bodim - Link NCP
+                <div style="font-size: 10px; font-weight: 400; color: #64748b;">Student Accommodation & Boarding</div>
+            </div>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="/" class="active">Home</a></li>
+            <li><a href="/student">For Students</a></li>
+            <li><a href="/owner">For Owners</a></li>
+            <li><a href="#">Boardings</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact Us</a></li>
+        </ul>
+        <div class="nav-auth">
+            <a href="/login" class="btn-outline"><i class="fa-regular fa-user"></i> Login</a>
+            <a href="/register" class="btn-solid"><i class="fa-solid fa-user-plus"></i> Register</a>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="hero-badge">
+            <i class="fa-solid fa-house"></i> Welcome To Bodim - Link NCP
+        </div>
+        <h1 class="hero-title">Find Your Perfect Stay In <span>Anuradhapura & Mihinthale</span></h1>
+        <p class="hero-desc">Connecting Students with verified boarding places. Safe, reliable & hassle-free accommodation search.</p>
+        <div style="display: flex; gap: 15px;">
+            <a href="/register" class="btn-solid" style="padding: 12px 25px;"><i class="fa-solid fa-user-graduate"></i> I'm a Student</a>
+            <a href="/register" class="btn-outline" style="padding: 12px 25px; background: white;"><i class="fa-solid fa-house-user"></i> I'm an Owner</a>
+        </div>
+    </section>
+
+    <div class="search-box">
+        <div style="position: absolute; top: -15px; left: 25px; font-weight: 700; font-size: 20px; display: flex; align-items: center; gap: 10px; color: var(--text-dark);">
+            <i class="fa-solid fa-magnifying-glass" style="color: var(--primary);"></i> Search Boarding Places
+        </div>
+        <div class="search-field" style="margin-top: 15px;">
+            <label>Gender Preference</label>
+            <select><option>Any</option><option>Boys Only</option><option>Girls Only</option></select>
+        </div>
+        <div class="search-field" style="margin-top: 15px;">
+            <label>Location</label>
+            <select><option>Any Location</option><option>Anuradhapura</option><option>Mihinthale</option></select>
+        </div>
+        <div class="search-field" style="margin-top: 15px;">
+            <label>Max Monthly Rent</label>
+            <select><option>Any Budget</option><option>Under Rs. 5000</option><option>Under Rs. 10000</option></select>
+        </div>
+        <button class="btn-search"><i class="fa-solid fa-magnifying-glass"></i> Search Now</button>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-regular fa-calendar-check"></i></div>
+            <h4>30-Day Validation</h4>
+            <p>Listings not updated within 30 days are hidden to ensure accurate & available information.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-robot"></i></div>
+            <h4>Smart Search Chatbot</h4>
+            <p>Find places instantly using simple queries like "Boys, Mihinthale, Under 5000" with our rule-based chatbot.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-regular fa-comment-dots"></i></div>
+            <h4>Instant SMS Alerts</h4>
+            <p>Owners receive instant SMS notifications when students request to view or book their place.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <h4>Safe & Trusted</h4>
+            <p>We prioritize student safety by connecting you with verified & reliable accommodations.</p>
+        </div>
+    </div>
+
+    <div class="stats-bar">
+        <div class="stat-item">
+            <i class="fa-regular fa-building"></i>
+            <div><h3>500+</h3><p>Active Boardings</p></div>
+        </div>
+        <div class="stat-item">
+            <i class="fa-solid fa-users"></i>
+            <div><h3>500+</h3><p>Happy Students</p></div>
+        </div>
+        <div class="stat-item">
+            <i class="fa-solid fa-location-dot"></i>
+            <div><h3>2</h3><p>Cities Covered</p></div>
+        </div>
+        <div class="stat-item">
+            <i class="fa-solid fa-shield-check"></i>
+            <div><h3>100%</h3><p>Verified Listings</p></div>
+        </div>
+    </div>
+
 </body>
 </html>

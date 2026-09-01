@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=6) }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2><i class="fa-solid fa-house-user"></i> Bodim-Link</h2>
+        <ul class="nav-links">
+            <li><a href="/student" class="active"><i class="fa-solid fa-magnifying-glass"></i> Find Boardings</a></li>
+            <li><a href="#" onclick="alert('Requests feature coming soon!')"><i class="fa-solid fa-envelope-open-text"></i> My Requests</a></li>
+            <li><a href="#" onclick="alert('Profile feature coming soon!')"><i class="fa-solid fa-user"></i> Profile</a></li>
+        </ul>
+        <a href="/login" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-header">
+            <div>
+                <h1>Find a Boarding</h1>
+                <p style="color: #64748b; margin-top: 5px;">Discover the best places around Rajarata University</p>
+            </div>
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=Student+User&background=3b82f6&color=fff" alt="User">
+                Student
+            </div>
+        </div>
+
+        <div class="card-grid">
+            <!-- Boarding Card 1 -->
+            <div class="boarding-card">
+                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Room" class="card-img">
+                <div class="card-content">
+                    <span class="badge boys">Boys Only</span>
+                    <h3 class="card-title">Green View Boarding</h3>
+                    <div class="card-details">
+                        <span><i class="fa-solid fa-location-dot"></i> Rajarata University Area</span>
+                        <span><i class="fa-solid fa-money-bill-wave"></i> Rs. 5,000 / month</span>
+                        <span><i class="fa-solid fa-bed"></i> 2 Seats Available</span>
+                    </div>
+                    <a href="#" class="btn-action">Request Visit</a>
+                </div>
+            </div>
+
+            <!-- Boarding Card 2 -->
+            <div class="boarding-card">
+                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Room" class="card-img">
+                <div class="card-content">
+                    <span class="badge girls">Girls Only</span>
+                    <h3 class="card-title">Mihintale Rest</h3>
+                    <div class="card-details">
+                        <span><i class="fa-solid fa-location-dot"></i> Mihintale Junction</span>
+                        <span><i class="fa-solid fa-money-bill-wave"></i> Rs. 6,500 / month</span>
+                        <span><i class="fa-solid fa-bed"></i> 1 Seat Available</span>
+                    </div>
+                    <a href="#" class="btn-action">Request Visit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

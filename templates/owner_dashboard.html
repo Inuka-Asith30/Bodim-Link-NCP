@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Boarding - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=6) }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Image Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fa-solid fa-house-chimney"></i>
+            <h2>Bodim - Link NCP</h2>
+            <p>Student Accommodation & Boarding</p>
+        </div>
+        
+        <button class="btn-add-boarding"><i class="fa-solid fa-plus"></i> Add Boarding</button>
+
+        <ul class="nav-links">
+            <li><a href="/owner"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="#" class="active"><i class="fa-solid fa-list"></i> My Listings</a></li>
+            <li><a href="#" onclick="alert('Bookings feature coming soon!')"><i class="fa-solid fa-bookmark"></i> Bookings</a></li>
+            <li><a href="#" onclick="alert('Messages feature coming soon!')"><i class="fa-solid fa-comment-dots"></i> Messages</a></li>
+            <li><a href="#" onclick="alert('Profile feature coming soon!')"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li><a href="#" onclick="alert('Settings feature coming soon!')"><i class="fa-solid fa-gear"></i> Settings</a></li>
+        </ul>
+        <a href="/login" class="nav-links" style="margin-top: auto; display:block;"><li style="list-style:none;"><a href="/login" style="padding:0;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></li></a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-nav">
+            <div class="top-links">
+                <a href="/">Home</a>
+                <a href="/student">For Students</a>
+                <a href="/owner" class="active">For Owners</a>
+                <a href="#">Boardings</a>
+                <a href="#">About Us</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="user-actions">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-regular fa-user"></i>
+            </div>
+        </div>
+
+        <h1 class="page-title">Add New Boarding</h1>
+        <p class="page-subtitle">Fill in the details below to list your boarding</p>
+
+        <form>
+            <div class="form-grid">
+                <!-- Left Column -->
+                <div>
+                    <div class="form-section">
+                        <div class="form-section-title"><i class="fa-solid fa-file-lines"></i> Basic Information</div>
+                        
+                        <label style="font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block;">Boarding Name</label>
+                        <input type="text" class="custom-input" placeholder="e.g. Sunethra Girls Boarding">
+
+                        <label style="font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block;">Location</label>
+                        <div style="position: relative;">
+                            <input type="text" class="custom-input" placeholder="e.g. Anuradhapura">
+                            <i class="fa-solid fa-location-dot" style="position: absolute; right: 15px; top: 15px; color: #94a3b8;"></i>
+                        </div>
+
+                        <label style="font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block;">Address</label>
+                        <textarea class="custom-input" placeholder="Enter full address"></textarea>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-title"><i class="fa-solid fa-wifi"></i> Facilities & Amenities</div>
+                        <div class="amenities-grid">
+                            <input type="checkbox" id="f1" class="amenity-checkbox" checked>
+                            <label for="f1" class="amenity-label"><i class="fa-solid fa-check"></i> Wifi</label>
+                            
+                            <input type="checkbox" id="f2" class="amenity-checkbox" checked>
+                            <label for="f2" class="amenity-label"><i class="fa-solid fa-check"></i> Meals</label>
+
+                            <input type="checkbox" id="f3" class="amenity-checkbox">
+                            <label for="f3" class="amenity-label"><i class="fa-solid fa-check"></i> Laundry</label>
+
+                            <input type="checkbox" id="f4" class="amenity-checkbox" checked>
+                            <label for="f4" class="amenity-label"><i class="fa-solid fa-check"></i> Study Room</label>
+
+                            <input type="checkbox" id="f5" class="amenity-checkbox">
+                            <label for="f5" class="amenity-label"><i class="fa-solid fa-check"></i> Hot Water</label>
+
+                            <input type="checkbox" id="f6" class="amenity-checkbox">
+                            <label for="f6" class="amenity-label"><i class="fa-solid fa-check"></i> Parking</label>
+                            
+                            <input type="checkbox" id="f7" class="amenity-checkbox" checked>
+                            <label for="f7" class="amenity-label"><i class="fa-solid fa-check"></i> Security</label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-title"><i class="fa-solid fa-tag"></i> Pricing</div>
+                        <div style="display: flex; gap: 20px;">
+                            <div style="flex:1;">
+                                <label style="font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block;">Monthly Rent (LKR)</label>
+                                <input type="number" class="custom-input" placeholder="e.g. 15000">
+                            </div>
+                            <div style="flex:1;">
+                                <label style="font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block;">Security Deposit (LKR)</label>
+                                <input type="number" class="custom-input" placeholder="e.g. 15000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <div class="form-section">
+                        <div class="form-section-title"><i class="fa-solid fa-images"></i> Photos</div>
+                        <div class="upload-box">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <p>Click to upload photos</p>
+                            <span>PNG, JPG UP TO 5 MB</span>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-title"><i class="fa-solid fa-venus-mars"></i> Gender Preference</div>
+                        <div class="gender-btns">
+                            <input type="radio" name="gender" id="gender-boys" class="gender-radio" value="boys" checked>
+                            <label for="gender-boys" class="gender-btn boys-label"><i class="fa-solid fa-person"></i> Boys</label>
+                            
+                            <input type="radio" name="gender" id="gender-girls" class="gender-radio" value="girls">
+                            <label for="gender-girls" class="gender-btn girls-label"><i class="fa-solid fa-person-dress"></i> Girls</label>
+                        </div>
+
+                        <label style="font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block;">Boarding Type</label>
+                        <select class="custom-input">
+                            <option>Full Boarding</option>
+                            <option>Room Only</option>
+                        </select>
+
+                        <label style="font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block;">Description</label>
+                        <textarea class="custom-input" placeholder="Description of your boarding..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel">Cancel</button>
+                        <button type="submit" class="btn-submit-purple"><i class="fa-solid fa-play"></i> Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

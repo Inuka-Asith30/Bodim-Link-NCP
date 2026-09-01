@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=6) }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2><i class="fa-solid fa-house-user"></i> Bodim-Link</h2>
+        <ul class="nav-links">
+            <li><a href="#" class="active"><i class="fa-solid fa-shield-halved"></i> Verifications</a></li>
+            <li><a href="#"><i class="fa-solid fa-users-gear"></i> Manage Users</a></li>
+            <li><a href="#"><i class="fa-solid fa-chart-line"></i> Statistics</a></li>
+        </ul>
+        <a href="/login" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-header">
+            <div>
+                <h1>Admin Portal</h1>
+                <p style="color: #64748b; margin-top: 5px;">System overview and owner verifications</p>
+            </div>
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=System+Admin&background=ef4444&color=fff" alt="User">
+                Administrator
+            </div>
+        </div>
+
+        <h2 style="color: #1e293b; font-size: 20px; margin-bottom: 20px;">Pending Owner Verifications</h2>
+        
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Owner Name</th>
+                    <th>Email</th>
+                    <th>Registration Date</th>
+                    <th>Electricity Bill</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div style="font-weight: 500; color: #1e293b;">Saman Kumara</div>
+                        <div style="font-size: 13px; color: #64748b;">0712345678</div>
+                    </td>
+                    <td>saman@gmail.com</td>
+                    <td>2026-09-01</td>
+                    <td>
+                        <a href="#" style="color: #3b82f6; text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 5px;">
+                            <i class="fa-solid fa-file-invoice"></i> View Bill
+                        </a>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-approve"><i class="fa-solid fa-check"></i> Approve</button>
+                            <button class="btn-reject"><i class="fa-solid fa-xmark"></i> Reject</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="font-weight: 500; color: #1e293b;">Kamal Perera</div>
+                        <div style="font-size: 13px; color: #64748b;">0777112233</div>
+                    </td>
+                    <td>kamalp@yahoo.com</td>
+                    <td>2026-08-31</td>
+                    <td>
+                        <a href="#" style="color: #3b82f6; text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 5px;">
+                            <i class="fa-solid fa-file-invoice"></i> View Bill
+                        </a>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-approve"><i class="fa-solid fa-check"></i> Approve</button>
+                            <button class="btn-reject"><i class="fa-solid fa-xmark"></i> Reject</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

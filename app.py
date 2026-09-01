@@ -33,6 +33,33 @@ def home():
     # This will send the index.html file to the user's browser
     return render_template('index.html', db_status=db_status)
 
+# Login Route
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    # We will add the actual Python backend logic here later (Theneth's part)
+    return render_template('login.html')
+
+# Register Route
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    # We will add the actual Python backend logic here later (Theneth's part)
+    return render_template('register.html')
+
+# Student Dashboard Route
+@app.route('/student')
+def student_dashboard():
+    return render_template('student_dashboard.html')
+
+# Owner Dashboard Route
+@app.route('/owner')
+def owner_dashboard():
+    return render_template('owner_dashboard.html')
+
+# Admin Dashboard Route
+@app.route('/admin')
+def admin_dashboard():
+    return render_template('admin_dashboard.html')
+
 if __name__ == '__main__':
     # Run the application in debug mode
     app.run(debug=True, port=5000)

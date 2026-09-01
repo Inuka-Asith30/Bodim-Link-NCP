@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=6) }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="auth-page">
+    
+    <nav class="navbar">
+        <div class="nav-logo">
+            <i class="fa-solid fa-house-chimney"></i>
+            <div>
+                Bodim - Link NCP
+                <div style="font-size: 10px; font-weight: 400; color: #64748b;">Student Accommodation & Boarding</div>
+            </div>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/student">For Students</a></li>
+            <li><a href="/owner">For Owners</a></li>
+            <li><a href="#">Boardings</a></li>
+        </ul>
+        <div class="nav-auth">
+            <a href="/login" class="btn-solid"><i class="fa-regular fa-user"></i> Login</a>
+            <a href="/register" class="btn-outline"><i class="fa-solid fa-user-plus"></i> Register</a>
+        </div>
+    </nav>
+
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-logo"><i class="fa-solid fa-house-chimney"></i></div>
+            <h2>Bodim - Link NCP</h2>
+            <p style="font-size: 11px; margin-bottom: 25px;">Students Accommodation & Boarding</p>
+
+            <h3 style="font-size: 18px; margin-bottom: 5px;">Welcome Back</h3>
+            <p>Login to continue to your account</p>
+
+            <form class="auth-form" action="/login" method="POST">
+                <label>Email Address</label>
+                <div class="auth-input-group">
+                    <i class="fa-regular fa-envelope"></i>
+                    <input type="email" name="email" placeholder="Student@example.com" required>
+                </div>
+
+                <div style="display: flex; justify-content: space-between;">
+                    <label>Password</label>
+                    <a href="#" style="font-size: 11px; color: var(--primary); text-decoration: none;">Forgot Password?</a>
+                </div>
+                <div class="auth-input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                    <i class="fa-regular fa-eye-slash" style="left: auto; right: 15px; cursor: pointer; color: #94a3b8;"></i>
+                </div>
+
+                <button type="submit" class="auth-btn">Login <i class="fa-solid fa-arrow-right"></i></button>
+
+                <div class="divider">Or</div>
+
+                <button type="button" class="btn-google">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google" style="width: 18px;">
+                    Login With Google
+                </button>
+            </form>
+
+            <div style="margin-top: 25px; font-size: 12px; color: var(--text-light);">
+                Don't have an account? <a href="/register" style="color: var(--primary); text-decoration: none; font-weight: 600;">Register Here</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
