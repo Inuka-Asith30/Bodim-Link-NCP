@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boarding Details - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=8) }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+
+    <!-- Top Navigation (borrowed from index) -->
+    <nav class="navbar" style="background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <div class="nav-logo">
+            <i class="fa-solid fa-house-chimney"></i>
+            <div>
+                Bodim - Link NCP
+                <div style="font-size: 10px; font-weight: 400; color: #64748b;">Student Accommodation & Boarding</div>
+            </div>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/student" class="active">Find Boardings</a></li>
+            <li><a href="/owner">For Owners</a></li>
+        </ul>
+        <div class="nav-auth">
+            <div class="user-profile">
+                <div class="user-avatar" style="background: #3b82f6; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">SU</div>
+                <span>Student</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+        <!-- Back button -->
+        <a href="/student" style="text-decoration: none; color: var(--text-light); font-size: 14px; margin-bottom: 20px; display: inline-block;">
+            <i class="fa-solid fa-arrow-left"></i> Back to Search
+        </a>
+
+        <!-- Main Content Grid -->
+        <div class="details-grid">
+            <!-- Left Side: Images & Info -->
+            <div class="details-main">
+                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Boarding Room" class="details-hero-img">
+                
+                <div class="details-header">
+                    <span class="badge boys">Boys Only</span>
+                    <h1 class="details-title">Green View Boarding</h1>
+                    <p class="details-location"><i class="fa-solid fa-location-dot"></i> Rajarata University Area, Mihintale</p>
+                </div>
+
+                <div class="details-section">
+                    <h3><i class="fa-solid fa-list-check"></i> Facilities & Amenities</h3>
+                    <div class="amenities-grid">
+                        <div class="amenity-item"><i class="fa-solid fa-wifi"></i> Free WiFi</div>
+                        <div class="amenity-item"><i class="fa-solid fa-utensils"></i> Meals Provided</div>
+                        <div class="amenity-item"><i class="fa-solid fa-book-open"></i> Study Room</div>
+                        <div class="amenity-item"><i class="fa-solid fa-shield-halved"></i> Security</div>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h3><i class="fa-solid fa-align-left"></i> Description</h3>
+                    <p style="color: var(--text-light); line-height: 1.6; font-size: 14px;">
+                        A very quiet and peaceful environment suitable for university students. 
+                        Only 5 minutes walking distance to Rajarata University. 
+                        Water and electricity bills are included in the monthly rent.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Side: Sticky Pricing & Contact Card -->
+            <div class="details-sidebar">
+                <div class="pricing-card">
+                    <div class="price-header">
+                        <h2>Rs. 5,000 <span>/ month</span></h2>
+                        <p>Security Deposit: Rs. 10,000</p>
+                    </div>
+                    
+                    <div class="availability-status">
+                        <i class="fa-solid fa-bed"></i> 2 Seats Available
+                    </div>
+
+                    <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
+
+                    <div class="owner-info">
+                        <div class="owner-avatar">S</div>
+                        <div>
+                            <h4>Saman Perera</h4>
+                            <p>Verified Owner <i class="fa-solid fa-circle-check" style="color: #10b981;"></i></p>
+                        </div>
+                    </div>
+
+                    <button class="btn-solid" style="width: 100%; margin-top: 20px; font-size: 16px; padding: 15px;">
+                        <i class="fa-solid fa-paper-plane"></i> Request Visit
+                    </button>
+                    <p style="text-align: center; font-size: 11px; color: var(--text-light); margin-top: 10px;">
+                        Owner will receive an SMS alert
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
