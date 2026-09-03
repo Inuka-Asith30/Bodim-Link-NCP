@@ -49,10 +49,6 @@ def owner_dashboard():
 def admin_dashboard():
     return render_template('admin_dashboard.html')
 
-@app.route('/boardings')
-def boardings():
-    return render_template('boardings.html')
-
 @app.route('/boarding/<int:id>')
 def boarding_details(id):
     return render_template('boarding_details.html')
