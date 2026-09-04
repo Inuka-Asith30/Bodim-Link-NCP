@@ -166,6 +166,14 @@ def logout():
 def boarding_details(id):
     return render_template('boarding_details.html')
 
+@app.route('/owner-bookings')
+def owner_bookings():
+    return render_template('owner_bookings.html')
+
+@app.route('/student-requests')
+def student_requests():
+    return render_template('student_requests.html')
+
 
 # ----------------------------------------------------
 # Sahan's Add Boarding Logic (Preserved)

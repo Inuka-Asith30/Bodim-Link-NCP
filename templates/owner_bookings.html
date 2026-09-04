@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Bookings & Visit Requests - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .bookings-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .table-toolbar {
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .filter-select, .search-box-input {
+            padding: 9px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 13px;
+            background: #f8fafc;
+            color: var(--text-dark);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .custom-table th {
+            background: #f8fafc;
+            padding: 16px 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .custom-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .custom-table tr:hover {
+            background: #faf5ff;
+        }
+
+        .student-profile-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .student-avatar-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            color: #4338ca;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .student-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .student-sub {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .badge-approved {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .badge-rejected {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .btn-action-accept {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+        .btn-action-accept:hover {
+            background: #15803d;
+        }
+
+        .btn-action-reject {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+        .btn-action-reject:hover {
+            background: #dc2626;
+        }
+
+        .contact-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Owner Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fa-solid fa-house-chimney"></i>
+            <h2>Bodim - Link NCP</h2>
+            <p>Student Accommodation & Boarding</p>
+        </div>
+        
+        <a href="/owner" class="btn-add-boarding" style="text-decoration:none;"><i class="fa-solid fa-plus"></i> Add Boarding</a>
+
+        <ul class="nav-links">
+            <li><a href="/owner"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="/my-listings"><i class="fa-solid fa-list"></i> My Listings</a></li>
+            <li><a href="/owner-bookings" class="active"><i class="fa-solid fa-bookmark"></i> Bookings</a></li>
+            <li><a href="#"><i class="fa-solid fa-comment-dots"></i> Messages</a></li>
+            <li><a href="#"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+        </ul>
+        <a href="/login" class="nav-links" style="margin-top: auto; display:block;"><li style="list-style:none;"><a href="/login" style="padding:0;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></li></a>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="top-nav">
+            <div class="top-links">
+                <a href="/">Home</a>
+                <a href="/student">For Students</a>
+                <a href="/owner" class="active">For Owners</a>
+                <a href="/boarding/1">Boardings</a>
+                <a href="#">About Us</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="user-actions">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-regular fa-user"></i>
+            </div>
+        </div>
+
+        <!-- Header Title -->
+        <div>
+            <h1 class="page-title">Booking & Visit Requests</h1>
+            <p class="page-subtitle">Manage student visit requests and confirm boarding room viewings</p>
+        </div>
+
+        <!-- Table Container -->
+        <div class="bookings-card">
+            <!-- Toolbar -->
+            <div class="table-toolbar">
+                <div class="filter-group">
+                    <input type="text" class="search-box-input" placeholder="Search by student name...">
+                    <select class="filter-select">
+                        <option value="">All Statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <div style="font-size: 13px; color: var(--text-light); font-weight: 500;">
+                    Pending Requests: <strong>2 Pending Approval</strong>
+                </div>
+            </div>
+
+            <!-- Requests Table -->
+            <div style="overflow-x: auto;">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Student Info</th>
+                            <th>Target Boarding</th>
+                            <th>Requested Date</th>
+                            <th>Contact Phone</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Request Row 1 -->
+                        <tr>
+                            <td>
+                                <div class="student-profile-meta">
+                                    <div class="student-avatar-circle">K</div>
+                                    <div>
+                                        <div class="student-name">Kasun Kalhara</div>
+                                        <div class="student-sub">Rajarata University Student</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong>Sunethra Girls Boarding</strong>
+                                <div style="font-size: 12px; color: var(--text-light);">Anuradhapura</div>
+                            </td>
+                            <td>
+                                <div><i class="fa-regular fa-calendar" style="color: #7c3aed;"></i> Sep 06, 2026</div>
+                                <div style="font-size: 12px; color: var(--text-light);">10:30 AM</div>
+                            </td>
+                            <td>
+                                <a href="tel:0712345678" class="contact-pill"><i class="fa-solid fa-phone"></i> 071 234 5678</a>
+                            </td>
+                            <td>
+                                <span class="badge-status badge-pending"><i class="fa-solid fa-clock"></i> Pending</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                                    <button class="btn-action-accept" onclick="alert('Request Accepted!')"><i class="fa-solid fa-check"></i> Accept</button>
+                                    <button class="btn-action-reject" onclick="alert('Request Rejected!')"><i class="fa-solid fa-xmark"></i> Reject</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Request Row 2 -->
+                        <tr>
+                            <td>
+                                <div class="student-profile-meta">
+                                    <div class="student-avatar-circle" style="background:#fce7f3; color:#be185d;">N</div>
+                                    <div>
+                                        <div class="student-name">Nipuni Perera</div>
+                                        <div class="student-sub">Applied Sciences Dept.</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong>Green View Annexe</strong>
+                                <div style="font-size: 12px; color: var(--text-light);">Mihintale</div>
+                            </td>
+                            <td>
+                                <div><i class="fa-regular fa-calendar" style="color: #7c3aed;"></i> Sep 07, 2026</div>
+                                <div style="font-size: 12px; color: var(--text-light);">02:00 PM</div>
+                            </td>
+                            <td>
+                                <a href="tel:0779876543" class="contact-pill"><i class="fa-solid fa-phone"></i> 077 987 6543</a>
+                            </td>
+                            <td>
+                                <span class="badge-status badge-pending"><i class="fa-solid fa-clock"></i> Pending</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                                    <button class="btn-action-accept" onclick="alert('Request Accepted!')"><i class="fa-solid fa-check"></i> Accept</button>
+                                    <button class="btn-action-reject" onclick="alert('Request Rejected!')"><i class="fa-solid fa-xmark"></i> Reject</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Request Row 3 (Approved) -->
+                        <tr>
+                            <td>
+                                <div class="student-profile-meta">
+                                    <div class="student-avatar-circle" style="background:#e0f2fe; color:#0369a1;">S</div>
+                                    <div>
+                                        <div class="student-name">Sahan Sithumina</div>
+                                        <div class="student-sub">Management Faculty</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong>Sunethra Girls Boarding</strong>
+                                <div style="font-size: 12px; color: var(--text-light);">Anuradhapura</div>
+                            </td>
+                            <td>
+                                <div><i class="fa-regular fa-calendar" style="color: #7c3aed;"></i> Sep 04, 2026</div>
+                                <div style="font-size: 12px; color: var(--text-light);">04:00 PM</div>
+                            </td>
+                            <td>
+                                <a href="tel:0701122334" class="contact-pill"><i class="fa-solid fa-phone"></i> 070 112 2334</a>
+                            </td>
+                            <td>
+                                <span class="badge-status badge-approved"><i class="fa-solid fa-circle-check"></i> Approved</span>
+                            </td>
+                            <td style="text-align: right; color: var(--text-light); font-size: 12px;">
+                                Accepted on Sep 03
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
