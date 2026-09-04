@@ -34,36 +34,36 @@
             </div>
         </div>
 
-        <div class="card-grid">
-            <!-- Boarding Card 1 -->
+               <div class="card-grid">
+            <!-- අර static කාඩ්ස් වෙනුවට අපි මෙතන Jinja Loop එකක් දානවා -->
+            {% for boarding in boardings %}
             <div class="boarding-card">
-                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Room" class="card-img">
+                <!-- පින්තූරයක් දාලා නැත්නම් default පින්තූරයක් පෙන්වන්න -->
+                <img src="{{ url_for('static', filename=boarding.image_path) if boarding.image_path else 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' }}" alt="Room" class="card-img">
+                
                 <div class="card-content">
-                    <span class="badge boys">Boys Only</span>
-                    <h3 class="card-title">Green View Boarding</h3>
+                    <!-- Boys ද Girls ද කියලා අඳුරගන්න Badge එක -->
+                    <span class="badge {{ 'boys' if boarding.gender_preference == 'boys' else 'girls' }}">
+                        {{ boarding.gender_preference | capitalize }} Only
+                    </span>
+                    
+                    <h3 class="card-title">{{ boarding.location }} Boarding</h3>
+                    
                     <div class="card-details">
-                        <span><i class="fa-solid fa-location-dot"></i> Rajarata University Area</span>
-                        <span><i class="fa-solid fa-money-bill-wave"></i> Rs. 5,000 / month</span>
-                        <span><i class="fa-solid fa-bed"></i> 2 Seats Available</span>
+                        <span><i class="fa-solid fa-location-dot"></i> {{ boarding.location }}</span>
+                        <span><i class="fa-solid fa-money-bill-wave"></i> Rs. {{ boarding.rent }} / month</span>
+                        <span><i class="fa-solid fa-check"></i> {{ boarding.amenities }}</span>
                     </div>
-                    <a href="/boarding/1" class="btn-action">Request Visit</a>
+                    <!-- Theneth ගේ Task එකට අදාලව boarding details පිටුවට යන ලින්ක් එක -->
+                    <a href="/boarding/{{ boarding.id }}" class="btn-action">Request Visit</a>
                 </div>
             </div>
-
-            <!-- Boarding Card 2 -->
-            <div class="boarding-card">
-                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Room" class="card-img">
-                <div class="card-content">
-                    <span class="badge girls">Girls Only</span>
-                    <h3 class="card-title">Mihintale Rest</h3>
-                    <div class="card-details">
-                        <span><i class="fa-solid fa-location-dot"></i> Mihintale Junction</span>
-                        <span><i class="fa-solid fa-money-bill-wave"></i> Rs. 6,500 / month</span>
-                        <span><i class="fa-solid fa-bed"></i> 1 Seat Available</span>
-                    </div>
-                    <a href="#" class="btn-action">Request Visit</a>
-                </div>
+            {% else %}
+            <!-- ඩේටාබේස් එකේ බෝඩිම් කිසිවක් නැත්නම් මේක පෙන්වනවා -->
+            <div style="width: 100%; text-align: center; padding: 40px;">
+                <h3 style="color: #64748b;">දැනට බෝඩිම් කිසිවක් ඇතුලත් කර නොමැත.</h3>
             </div>
+            {% endfor %}
         </div>
     </div>
 </div>

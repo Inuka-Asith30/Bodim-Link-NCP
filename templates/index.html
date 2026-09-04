@@ -43,22 +43,24 @@
     </section>
 
     <div class="search-box">
-        <div style="position: absolute; top: -15px; left: 25px; font-weight: 700; font-size: 20px; display: flex; align-items: center; gap: 10px; color: var(--text-dark);">
+        <div class="search-box-header">
             <i class="fa-solid fa-magnifying-glass" style="color: var(--primary);"></i> Search Boarding Places
         </div>
-        <div class="search-field" style="margin-top: 15px;">
-            <label>Gender Preference</label>
-            <select><option>Any</option><option>Boys Only</option><option>Girls Only</option></select>
+        <div class="search-fields-row">
+            <div class="search-field">
+                <label><i class="fa-solid fa-users" style="color: #7c3aed;"></i> Gender Preference</label>
+                <select><option>Any</option><option>Boys Only</option><option>Girls Only</option></select>
+            </div>
+            <div class="search-field">
+                <label><i class="fa-solid fa-location-dot" style="color: #7c3aed;"></i> Location</label>
+                <select><option>Any Location</option><option>Anuradhapura</option><option>Mihinthale</option></select>
+            </div>
+            <div class="search-field">
+                <label><i class="fa-solid fa-tag" style="color: #7c3aed;"></i> Max Monthly Rent</label>
+                <select><option>Any Budget</option><option>Under Rs. 5000</option><option>Under Rs. 10000</option></select>
+            </div>
+            <button class="btn-search"><i class="fa-solid fa-magnifying-glass"></i> Search Now</button>
         </div>
-        <div class="search-field" style="margin-top: 15px;">
-            <label>Location</label>
-            <select><option>Any Location</option><option>Anuradhapura</option><option>Mihinthale</option></select>
-        </div>
-        <div class="search-field" style="margin-top: 15px;">
-            <label>Max Monthly Rent</label>
-            <select><option>Any Budget</option><option>Under Rs. 5000</option><option>Under Rs. 10000</option></select>
-        </div>
-        <button class="btn-search"><i class="fa-solid fa-magnifying-glass"></i> Search Now</button>
     </div>
 
     <div class="features-grid">

@@ -34,9 +34,7 @@ def get_db_connection():
 def index():
     return render_template('index.html')
 
-# ----------------------------------------------------
-# Task A: User Registration (Theneth)
-# ----------------------------------------------------
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -121,10 +119,28 @@ def login():
 # ----------------------------------------------------
 @app.route('/student')
 def student_dashboard():
+    
     if 'user_id' not in session or session.get('user_role') != 'student':
         return redirect(url_for('login'))
-    return render_template('student_dashboard.html')
+        
 
+    connection = get_db_connection()
+    boardings = [] 
+    
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                
+                cursor.execute("SELECT * FROM boardings ORDER BY id DESC")
+            
+                boardings = cursor.fetchall()
+        except Exception as e:
+            print(f"Database Error: {e}")
+        finally:
+            connection.close()
+            
+    
+    return render_template('student_dashboard.html', boardings=boardings)
 @app.route('/owner')
 def owner_dashboard():
     if 'user_id' not in session or session.get('user_role') != 'owner':
