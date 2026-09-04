@@ -156,6 +156,12 @@ def my_listings():
             
     return render_template('my_listings.html', boardings=boardings)
 
+@app.route('/owner_bookings')
+def owner_bookings():
+    if 'user_id' not in session or session.get('user_role') != 'owner':
+        return redirect(url_for('login'))
+    return render_template('owner_bookings.html')
+
 @app.route('/logout')
 def logout():
     session.clear()
