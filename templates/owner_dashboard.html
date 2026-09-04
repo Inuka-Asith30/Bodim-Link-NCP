@@ -51,7 +51,7 @@
         <h1 class="page-title">Add New Boarding</h1>
         <p class="page-subtitle">Fill in the details below to list your boarding</p>
 
-        <form>
+        <form action="/add_boarding" method="POST" enctype="multipart/form-data">
             <div class="form-grid">
                 <!-- Left Column -->
                 <div>
@@ -59,41 +59,32 @@
                         <div class="form-section-title"><i class="fa-solid fa-file-lines"></i> Basic Information</div>
                         
                         <label style="font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block;">Boarding Name</label>
-                        <input type="text" class="custom-input" placeholder="e.g. Sunethra Girls Boarding">
+                        <input type="text" name="boarding_name" class="custom-input" placeholder="e.g. Sunethra Girls Boarding" required>
 
                         <label style="font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block;">Location</label>
                         <div style="position: relative;">
-                            <input type="text" class="custom-input" placeholder="e.g. Anuradhapura">
+                            <input type="text" name="location" class="custom-input" placeholder="e.g. Anuradhapura" required>
                             <i class="fa-solid fa-location-dot" style="position: absolute; right: 15px; top: 15px; color: #94a3b8;"></i>
                         </div>
 
                         <label style="font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block;">Address</label>
-                        <textarea class="custom-input" placeholder="Enter full address"></textarea>
+                        <textarea name="address" class="custom-input" placeholder="Enter full address" required></textarea>
                     </div>
 
                     <div class="form-section">
                         <div class="form-section-title"><i class="fa-solid fa-wifi"></i> Facilities & Amenities</div>
                         <div class="amenities-grid">
-                            <input type="checkbox" id="f1" class="amenity-checkbox" checked>
+                            <input type="checkbox" name="amenities" value="Wifi" id="f1" class="amenity-checkbox" checked>
                             <label for="f1" class="amenity-label"><i class="fa-solid fa-check"></i> Wifi</label>
                             
-                            <input type="checkbox" id="f2" class="amenity-checkbox" checked>
+                            <input type="checkbox" name="amenities" value="Meals" id="f2" class="amenity-checkbox" checked>
                             <label for="f2" class="amenity-label"><i class="fa-solid fa-check"></i> Meals</label>
 
-                            <input type="checkbox" id="f3" class="amenity-checkbox">
+                            <input type="checkbox" name="amenities" value="Laundry" id="f3" class="amenity-checkbox">
                             <label for="f3" class="amenity-label"><i class="fa-solid fa-check"></i> Laundry</label>
 
-                            <input type="checkbox" id="f4" class="amenity-checkbox" checked>
+                            <input type="checkbox" name="amenities" value="Study Room" id="f4" class="amenity-checkbox" checked>
                             <label for="f4" class="amenity-label"><i class="fa-solid fa-check"></i> Study Room</label>
-
-                            <input type="checkbox" id="f5" class="amenity-checkbox">
-                            <label for="f5" class="amenity-label"><i class="fa-solid fa-check"></i> Hot Water</label>
-
-                            <input type="checkbox" id="f6" class="amenity-checkbox">
-                            <label for="f6" class="amenity-label"><i class="fa-solid fa-check"></i> Parking</label>
-                            
-                            <input type="checkbox" id="f7" class="amenity-checkbox" checked>
-                            <label for="f7" class="amenity-label"><i class="fa-solid fa-check"></i> Security</label>
                         </div>
                     </div>
 
@@ -102,11 +93,11 @@
                         <div style="display: flex; gap: 20px;">
                             <div style="flex:1;">
                                 <label style="font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block;">Monthly Rent (LKR)</label>
-                                <input type="number" class="custom-input" placeholder="e.g. 15000">
+                                <input type="number" name="rent" class="custom-input" placeholder="e.g. 15000" required>
                             </div>
                             <div style="flex:1;">
                                 <label style="font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block;">Security Deposit (LKR)</label>
-                                <input type="number" class="custom-input" placeholder="e.g. 15000">
+                                <input type="number" name="deposit" class="custom-input" placeholder="e.g. 15000">
                             </div>
                         </div>
                     </div>
@@ -116,31 +107,26 @@
                 <div>
                     <div class="form-section">
                         <div class="form-section-title"><i class="fa-solid fa-images"></i> Photos</div>
-                        <div class="upload-box">
+                        <div class="upload-box" style="padding: 10px;">
+                            <input type="file" name="image" accept="image/png, image/jpeg" style="display:block; margin: 10px auto;" required>
                             <i class="fa-solid fa-cloud-arrow-up"></i>
-                            <p>Click to upload photos</p>
-                            <span>PNG, JPG UP TO 5 MB</span>
+                            <p>Select a photo to upload</p>
+                            <span>PNG, JPG UP TO 16 MB</span>
                         </div>
                     </div>
 
                     <div class="form-section">
                         <div class="form-section-title"><i class="fa-solid fa-venus-mars"></i> Gender Preference</div>
                         <div class="gender-btns">
-                            <input type="radio" name="gender" id="gender-boys" class="gender-radio" value="boys" checked>
+                            <input type="radio" name="gender_preference" id="gender-boys" class="gender-radio" value="boys" checked>
                             <label for="gender-boys" class="gender-btn boys-label"><i class="fa-solid fa-person"></i> Boys</label>
                             
-                            <input type="radio" name="gender" id="gender-girls" class="gender-radio" value="girls">
+                            <input type="radio" name="gender_preference" id="gender-girls" class="gender-radio" value="girls">
                             <label for="gender-girls" class="gender-btn girls-label"><i class="fa-solid fa-person-dress"></i> Girls</label>
                         </div>
 
-                        <label style="font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block;">Boarding Type</label>
-                        <select class="custom-input">
-                            <option>Full Boarding</option>
-                            <option>Room Only</option>
-                        </select>
-
                         <label style="font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block;">Description</label>
-                        <textarea class="custom-input" placeholder="Description of your boarding..."></textarea>
+                        <textarea name="description" class="custom-input" placeholder="Description of your boarding..."></textarea>
                     </div>
 
                     <div class="form-actions">
