@@ -98,20 +98,39 @@
     </div>
 
     <!-- JavaScript to toggle owner fields -->
-    <script>
-        function toggleOwnerFields() {
-            var role = document.getElementById("role").value;
-            var ownerFields = document.getElementById("owner-fields");
-            var billInput = document.getElementById("electricity_bill");
-            
-            if (role === "owner") {
-                ownerFields.classList.remove("hidden");
-                billInput.required = true;
-            } else {
-                ownerFields.classList.add("hidden");
-                billInput.required = false;
+        <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.querySelector(".auth-form");
+        
+        form.addEventListener("submit", function(event) {
+            const phone = document.querySelector('input[name="phone"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+            const email = document.querySelector('input[name="email"]').value;
+
+            // 1. Phone number validation 
+            const phoneRegex = /^[0-9]{10}$/;
+            if (!phoneRegex.test(phone)) {
+                alert("Please enter a valid 10-digit phone number (e.g., 0712345678).");
+                event.preventDefault(); 
+                return;
             }
-        }
+
+            // 2. Password validation 
+            if (password.length < 6) {
+                alert("Password must be at least 6 characters long for security.");
+                event.preventDefault();
+                return;
+            }
+            
+            // 3. Email format validation 
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert("Please enter a valid email address.");
+                event.preventDefault();
+                return;
+            }
+        });
+    });
     </script>
 </body>
 </html>
