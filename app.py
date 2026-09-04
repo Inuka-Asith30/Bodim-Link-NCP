@@ -137,9 +137,24 @@ def admin_dashboard():
         return redirect(url_for('login'))
     return render_template('admin_dashboard.html')
 
-@app.route('/my-listings')
+@app.route('/my_listings')
 def my_listings():
-    return render_template('my_listings.html')
+    if 'user_id' not in session or session.get('user_role') != 'owner':
+        return redirect(url_for('login'))
+        
+    connection = get_db_connection()
+    boardings = []
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM boardings WHERE owner_id = %s", (session['user_id'],))
+                boardings = cursor.fetchall()
+        except Exception as e:
+            print(f"Database Error: {e}")
+        finally:
+            connection.close()
+            
+    return render_template('my_listings.html', boardings=boardings)
 
 @app.route('/logout')
 def logout():
