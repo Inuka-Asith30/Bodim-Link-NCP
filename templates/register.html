@@ -83,9 +83,17 @@
                 </div>
 
                 <label>Password</label>
-                <div class="auth-input-group">
+                <div class="auth-input-group" style="position: relative;">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" name="password" placeholder="••••••••" required>
+                    <input type="password" name="password" id="reg-password" placeholder="••••••••" required>
+                    <i class="fa-regular fa-eye" id="toggle-pw" style="position: absolute; right: 15px; cursor: pointer; color: #94a3b8;" onclick="togglePassword('reg-password', 'toggle-pw')"></i>
+                </div>
+
+                <label>Confirm Password</label>
+                <div class="auth-input-group" style="position: relative;">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" name="confirm_password" id="reg-confirm" placeholder="••••••••" required>
+                    <i class="fa-regular fa-eye" id="toggle-confirm" style="position: absolute; right: 15px; cursor: pointer; color: #94a3b8;" onclick="togglePassword('reg-confirm', 'toggle-confirm')"></i>
                 </div>
 
                 <button type="submit" class="auth-btn">Register <i class="fa-solid fa-arrow-right"></i></button>
@@ -105,6 +113,7 @@
         form.addEventListener("submit", function(event) {
             const phone = document.querySelector('input[name="phone"]').value;
             const password = document.querySelector('input[name="password"]').value;
+            const confirm_password = document.querySelector('input[name="confirm_password"]').value;
             const email = document.querySelector('input[name="email"]').value;
 
             // 1. Phone number validation 
@@ -121,6 +130,12 @@
                 event.preventDefault();
                 return;
             }
+
+            if (password !== confirm_password) {
+                alert("Passwords do not match!");
+                event.preventDefault();
+                return;
+            }
             
             // 3. Email format validation 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -131,6 +146,20 @@
             }
         });
     });
+
+    function togglePassword(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
     </script>
 </body>
 </html>

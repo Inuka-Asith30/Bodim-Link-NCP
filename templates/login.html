@@ -45,14 +45,15 @@
                     <input type="email" name="email" placeholder="Student@example.com" required>
                 </div>
 
-                <div style="display: flex; justify-content: space-between;">
-                    <label>Password</label>
-                    <a href="#" style="font-size: 11px; color: var(--primary); text-decoration: none;">Forgot Password?</a>
-                </div>
-                <div class="auth-input-group">
+                <label>Password</label>
+                <div class="auth-input-group" style="position: relative;">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" name="password" placeholder="••••••••" required>
-                    <i class="fa-regular fa-eye-slash" style="left: auto; right: 15px; cursor: pointer; color: #94a3b8;"></i>
+                    <input type="password" name="password" id="login-password" placeholder="••••••••" required>
+                    <i class="fa-regular fa-eye" id="toggle-pw" style="position: absolute; right: 15px; cursor: pointer; color: #94a3b8;" onclick="togglePassword('login-password', 'toggle-pw')"></i>
+                </div>
+
+                <div style="text-align: right; margin-top: -15px; margin-bottom: 20px;">
+                    <a href="#" style="font-size: 11px; color: var(--primary); text-decoration: none;">Forgot Password?</a>
                 </div>
 
                 <button type="submit" class="auth-btn">Login <i class="fa-solid fa-arrow-right"></i></button>
@@ -73,3 +74,18 @@
 
 </body>
 </html>
+<script>
+    function togglePassword(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+</script>
