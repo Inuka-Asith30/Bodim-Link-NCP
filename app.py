@@ -15,16 +15,20 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 DB_HOST = 'localhost'
 DB_USER = 'root'
 DB_PASSWORD = ''
-DB_NAME = 'database'
+DB_NAME = 'bodim_link_ncp'
 
 def get_db_connection():
-    return pymysql.connect(
-        host=DB_HOST,
-        user=DB_USER,
-        password=DB_PASSWORD,
-        database=DB_NAME,
-        cursorclass=pymysql.cursors.DictCursor
-    )
+    try:
+        return pymysql.connect(
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME,
+            cursorclass=pymysql.cursors.DictCursor
+        )
+    except Exception as e:
+        print(f"Database Connection Warning: {e}")
+        return None
 
 @app.route('/')
 def index():
@@ -164,19 +168,20 @@ def add_boarding():
             image_path = f"uploads/{filename}"
             
     connection = get_db_connection()
-    try:
-        with connection.cursor() as cursor:
-            sql = """
-                INSERT INTO boardings (owner_id, location, rent, amenities, gender_preference, image_path)
-                VALUES (%s, %s, %s, %s, %s, %s)
-            """
-            cursor.execute(sql, (owner_id, location, rent, amenities, gender_preference, image_path))
-        connection.commit()
-    except Exception as e:
-        connection.rollback()
-        print(f"Error: {e}")
-    finally:
-        connection.close()
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                sql = """
+                    INSERT INTO boardings (owner_id, location, rent, amenities, gender_preference, image_path)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                """
+                cursor.execute(sql, (owner_id, location, rent, amenities, gender_preference, image_path))
+            connection.commit()
+        except Exception as e:
+            connection.rollback()
+            print(f"Error: {e}")
+        finally:
+            connection.close()
         
     return redirect(url_for('owner_dashboard'))
 
