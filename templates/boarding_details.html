@@ -84,9 +84,9 @@
                     <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
 
                     <div class="owner-info">
-                        <div class="owner-avatar">S</div>
+                        <div class='owner-avatar'>{{ session['user_name'][0]|upper if session.get('user_name') else 'O' }}</div>
                         <div>
-                            <h4>Saman Perera</h4>
+                            <h4>{{ session['user_name'] if session.get('user_name') else 'Owner' }}</h4>
                             <p>Verified Owner <i class="fa-solid fa-circle-check" style="color: #10b981;"></i></p>
                         </div>
                     </div>
