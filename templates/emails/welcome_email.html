@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Bodim-Link NCP</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #0056b3;
+            color: #ffffff;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 30px;
+            color: #333333;
+            line-height: 1.6;
+        }
+        .content h2 {
+            color: #0056b3;
+            font-size: 20px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #28a745;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .footer {
+            background-color: #eeeeee;
+            color: #777777;
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="email-container">
+    <div class="header">
+        <h1>Bodim-Link NCP</h1>
+    </div>
+    
+    <div class="content">
+        <h2>Welcome to Your New Home Finder!</h2>
+        <p>Hi {{ name }},</p>
+        <p>Thank you for joining <strong>Bodim-Link NCP</strong>! We are thrilled to have you on board. Our provincial matchmaking system is designed to seamlessly connect students with the best boarding owners in the North Central Province.</p>
+        
+        <p>You can now start browsing available accommodations, filtering by distance to your university, price, and amenities.</p>
+        
+        <div style="text-align: center;">
+            <a href="{{ login_url }}" class="btn">Log In to Your Dashboard</a>
+        </div>
+        
+        <p style="margin-top: 30px;">If you need any help, our support team is always here for you.</p>
+        <p>Best regards,<br>The Bodim-Link NCP Team</p>
+    </div>
+    
+    <div class="footer">
+        &copy; 2026 Bodim-Link NCP. All rights reserved.<br>
+        North Central Province, Sri Lanka.
+    </div>
+</div>
+
+</body>
+</html>
