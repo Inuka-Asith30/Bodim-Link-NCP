@@ -137,6 +137,10 @@ def admin_dashboard():
         return redirect(url_for('login'))
     return render_template('admin_dashboard.html')
 
+@app.route('/my-listings')
+def my_listings():
+    return render_template('my_listings.html')
+
 @app.route('/logout')
 def logout():
     session.clear()

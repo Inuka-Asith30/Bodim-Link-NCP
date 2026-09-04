@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Listings - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .listings-table-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .table-toolbar {
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-filter-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-input-wrap {
+            position: relative;
+        }
+
+        .search-input-wrap input {
+            padding: 9px 15px 9px 38px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 13px;
+            background: #f8fafc;
+            width: 240px;
+        }
+
+        .search-input-wrap i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .status-select {
+            padding: 9px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 13px;
+            background: #f8fafc;
+            color: var(--text-dark);
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .custom-table th {
+            background: #f8fafc;
+            padding: 16px 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .custom-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .custom-table tr:hover {
+            background: #faf5ff;
+        }
+
+        .boarding-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .boarding-thumb {
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 1px solid var(--border);
+        }
+
+        .boarding-title-text {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+
+        .boarding-loc-text {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .action-icon-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--text-dark);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .action-icon-btn:hover {
+            background: #7c3aed;
+            color: white;
+            border-color: #7c3aed;
+        }
+
+        .action-icon-btn.delete-btn:hover {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fa-solid fa-house-chimney"></i>
+            <h2>Bodim - Link NCP</h2>
+            <p>Student Accommodation & Boarding</p>
+        </div>
+        
+        <a href="/owner" class="btn-add-boarding" style="text-decoration:none;"><i class="fa-solid fa-plus"></i> Add Boarding</a>
+
+        <ul class="nav-links">
+            <li><a href="/owner"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="/my-listings" class="active"><i class="fa-solid fa-list"></i> My Listings</a></li>
+            <li><a href="#"><i class="fa-solid fa-bookmark"></i> Bookings</a></li>
+            <li><a href="#"><i class="fa-solid fa-comment-dots"></i> Messages</a></li>
+            <li><a href="#"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+        </ul>
+        <a href="/login" class="nav-links" style="margin-top: auto; display:block;"><li style="list-style:none;"><a href="/login" style="padding:0;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></li></a>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="top-nav">
+            <div class="top-links">
+                <a href="/">Home</a>
+                <a href="/student">For Students</a>
+                <a href="/owner" class="active">For Owners</a>
+                <a href="/boarding/1">Boardings</a>
+                <a href="#">About Us</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="user-actions">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-regular fa-user"></i>
+            </div>
+        </div>
+
+        <!-- Page Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <div>
+                <h1 class="page-title">My Boarding Listings</h1>
+                <p class="page-subtitle">Manage, track, and update all your listed accommodations</p>
+            </div>
+            <a href="/owner" class="btn-solid" style="padding: 10px 20px; text-decoration: none; border-radius: 10px;">
+                <i class="fa-solid fa-plus"></i> Add New Boarding
+            </a>
+        </div>
+
+        <!-- Table Card -->
+        <div class="listings-table-card">
+            <!-- Toolbar -->
+            <div class="table-toolbar">
+                <div class="search-filter-group">
+                    <div class="search-input-wrap">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search my listings...">
+                    </div>
+                    <select class="status-select">
+                        <option value="">All Statuses</option>
+                        <option value="active">Active & Verified</option>
+                        <option value="pending">Pending Verification</option>
+                    </select>
+                </div>
+                <div style="font-size: 13px; color: var(--text-light); font-weight: 500;">
+                    Total Listings: <strong>3 Active</strong>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div style="overflow-x: auto;">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Boarding Details</th>
+                            <th>Gender Pref.</th>
+                            <th>Monthly Rent</th>
+                            <th>Available Seats</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Listing Item 1 -->
+                        <tr>
+                            <td>
+                                <div class="boarding-meta">
+                                    <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" class="boarding-thumb" alt="Sunethra Girls Boarding">
+                                    <div>
+                                        <div class="boarding-title-text">Sunethra Girls Boarding</div>
+                                        <div class="boarding-loc-text"><i class="fa-solid fa-location-dot"></i> Anuradhapura</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge girls"><i class="fa-solid fa-person-dress"></i> Girls Only</span>
+                            </td>
+                            <td>
+                                <strong style="color: #7c3aed;">LKR 15,000</strong>
+                            </td>
+                            <td>
+                                <strong>8</strong> / 10 Seats
+                            </td>
+                            <td>
+                                <span class="status-pill status-active"><i class="fa-solid fa-circle-check"></i> Verified</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <a href="/boarding/1" class="action-icon-btn" title="View Public Page"><i class="fa-solid fa-eye"></i></a>
+                                <a href="#" class="action-icon-btn" title="Edit Listing"><i class="fa-solid fa-pen"></i></a>
+                                <a href="#" class="action-icon-btn delete-btn" title="Delete Listing" onclick="confirm('Are you sure you want to delete this listing?')"><i class="fa-solid fa-trash"></i></a>
+                            </td>
+                        </tr>
+
+                        <!-- Listing Item 2 -->
+                        <tr>
+                            <td>
+                                <div class="boarding-meta">
+                                    <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" class="boarding-thumb" alt="Mihintale Student Villa">
+                                    <div>
+                                        <div class="boarding-title-text">Mihintale Student Villa</div>
+                                        <div class="boarding-loc-text"><i class="fa-solid fa-location-dot"></i> Mihintale Town</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge boys"><i class="fa-solid fa-person"></i> Boys Only</span>
+                            </td>
+                            <td>
+                                <strong style="color: #7c3aed;">LKR 9,500</strong>
+                            </td>
+                            <td>
+                                <strong>4</strong> / 6 Seats
+                            </td>
+                            <td>
+                                <span class="status-pill status-active"><i class="fa-solid fa-circle-check"></i> Verified</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <a href="/boarding/1" class="action-icon-btn" title="View Public Page"><i class="fa-solid fa-eye"></i></a>
+                                <a href="#" class="action-icon-btn" title="Edit Listing"><i class="fa-solid fa-pen"></i></a>
+                                <a href="#" class="action-icon-btn delete-btn" title="Delete Listing" onclick="confirm('Are you sure you want to delete this listing?')"><i class="fa-solid fa-trash"></i></a>
+                            </td>
+                        </tr>
+
+                        <!-- Listing Item 3 -->
+                        <tr>
+                            <td>
+                                <div class="boarding-meta">
+                                    <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" class="boarding-thumb" alt="Green View Annexe">
+                                    <div>
+                                        <div class="boarding-title-text">Green View Annexe</div>
+                                        <div class="boarding-loc-text"><i class="fa-solid fa-location-dot"></i> Anuradhapura</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge girls"><i class="fa-solid fa-person-dress"></i> Girls Only</span>
+                            </td>
+                            <td>
+                                <strong style="color: #7c3aed;">LKR 12,000</strong>
+                            </td>
+                            <td>
+                                <strong>2</strong> / 4 Seats
+                            </td>
+                            <td>
+                                <span class="status-pill status-pending"><i class="fa-solid fa-clock"></i> Pending Review</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <a href="/boarding/1" class="action-icon-btn" title="View Public Page"><i class="fa-solid fa-eye"></i></a>
+                                <a href="#" class="action-icon-btn" title="Edit Listing"><i class="fa-solid fa-pen"></i></a>
+                                <a href="#" class="action-icon-btn delete-btn" title="Delete Listing" onclick="confirm('Are you sure you want to delete this listing?')"><i class="fa-solid fa-trash"></i></a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
