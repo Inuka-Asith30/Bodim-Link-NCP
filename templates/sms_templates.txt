@@ -1,0 +1,13 @@
+--- Bodim-Link NCP: SMS Alert Templates ---
+
+1. Welcome SMS (Sent after registration)
+"Welcome to Bodim-Link NCP, {name}! Start searching for your perfect boarding place today. Log in here: {login_url}"
+
+2. Booking Request Sent (Sent to Boarding Owner)
+"Bodim-Link Alert: You have a new boarding request from {student_name}. Log in to your owner dashboard to accept or decline."
+
+3. Booking Accepted (Sent to Student)
+"Great news {student_name}! Your boarding request for {boarding_name} has been ACCEPTED. Call the owner at {owner_phone} to arrange move-in details."
+
+4. Reminder Alert (Sent to Student)
+"Bodim-Link Alert: Your monthly rent of Rs. {monthly_rent} is coming up soon. Please ensure payment is arranged with your owner."
