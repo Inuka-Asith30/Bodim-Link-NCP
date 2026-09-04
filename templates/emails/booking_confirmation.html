@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed - Bodim-Link NCP</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #28a745; /* Success Green */
+            color: #ffffff;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 30px;
+            color: #333333;
+            line-height: 1.6;
+        }
+        .content h2 {
+            color: #28a745;
+            font-size: 20px;
+        }
+        .details-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .details-box p {
+            margin: 5px 0;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #0056b3;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .footer {
+            background-color: #eeeeee;
+            color: #777777;
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="email-container">
+    <div class="header">
+        <h1>Bodim-Link NCP</h1>
+    </div>
+    
+    <div class="content">
+        <h2>Great News! Your Booking is Confirmed 🎉</h2>
+        <p>Hi {{ student_name }},</p>
+        <p>We are excited to let you know that your boarding request has been accepted by the owner! Here are your booking details:</p>
+        
+        <div class="details-box">
+            <p><strong>Boarding Name:</strong> {{ boarding_name }}</p>
+            <p><strong>Owner:</strong> {{ owner_name }}</p>
+            <p><strong>Contact:</strong> {{ owner_phone }}</p>
+            <p><strong>Move-in Date:</strong> {{ move_in_date }}</p>
+            <p><strong>Monthly Rent:</strong> Rs. {{ monthly_rent }}</p>
+        </div>
+        
+        <p>Please reach out to the owner directly using the phone number above to finalize your arrival details. You can also view your full booking history on your dashboard.</p>
+        
+        <div style="text-align: center;">
+            <a href="{{ dashboard_url }}" class="btn">View My Dashboard</a>
+        </div>
+        
+        <p style="margin-top: 30px;">Thank you for using Bodim-Link NCP!</p>
+        <p>Best regards,<br>The Bodim-Link NCP Team</p>
+    </div>
+    
+    <div class="footer">
+        &copy; 2026 Bodim-Link NCP. All rights reserved.<br>
+        North Central Province, Sri Lanka.
+    </div>
+</div>
+
+</body>
+</html>
