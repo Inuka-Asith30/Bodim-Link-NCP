@@ -51,7 +51,7 @@ def register():
         connection = get_db_connection()
         try:
             with connection.cursor() as cursor:
-                sql = "INSERT INTO users (name, phone, email, password, role) VALUES (%s, %s, %s, %s, %s)"
+                sql = "INSERT INTO users (name, phone, email, password_hash, role) VALUES (%s, %s, %s, %s, %s)"
                 cursor.execute(sql, (name, phone, email, hashed_password, role))
                 
                 # If owner uploads bill (optional as per original logic)
@@ -92,7 +92,7 @@ def login():
                 cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
                 user = cursor.fetchone()
 
-                if user and check_password_hash(user['password'], password):
+                if user and check_password_hash(user['password_hash'], password):
                     session['user_id'] = user['id']
                     session['user_name'] = user['name']
                     session['user_role'] = user['role']
