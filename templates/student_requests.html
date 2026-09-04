@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Visit Requests - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .student-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .requests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .request-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .request-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.1);
+        }
+
+        .request-card-header {
+            position: relative;
+            height: 150px;
+        }
+
+        .request-card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .status-badge-floating {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(8px);
+        }
+
+        .badge-pending {
+            background: rgba(254, 243, 199, 0.95);
+            color: #b45309;
+            border: 1px solid #fde68a;
+        }
+
+        .badge-approved {
+            background: rgba(220, 252, 231, 0.95);
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .badge-rejected {
+            background: rgba(254, 226, 226, 0.95);
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+        }
+
+        .request-card-body {
+            padding: 20px;
+        }
+
+        .request-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .request-location {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .info-row-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 8px 0;
+            border-bottom: 1px dashed #f1f5f9;
+        }
+
+        .info-row-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-light);
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .owner-contact-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btn-call-owner {
+            background: #7c3aed;
+            color: white;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="student-layout">
+    <!-- Student Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fa-solid fa-house-chimney"></i>
+            <h2>Bodim - Link NCP</h2>
+            <p>Student Accommodation & Boarding</p>
+        </div>
+
+        <ul class="nav-links" style="margin-top: 30px;">
+            <li><a href="/student"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="/student-requests" class="active"><i class="fa-solid fa-clock-rotate-left"></i> My Requests</a></li>
+            <li><a href="#"><i class="fa-solid fa-heart"></i> Favorites</a></li>
+            <li><a href="#"><i class="fa-solid fa-user"></i> My Profile</a></li>
+            <li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+        </ul>
+        <a href="/login" class="nav-links" style="margin-top: auto; display:block;"><li style="list-style:none;"><a href="/login" style="padding:0;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></li></a>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="top-nav">
+            <div class="top-links">
+                <a href="/">Home</a>
+                <a href="/student" class="active">For Students</a>
+                <a href="/owner">For Owners</a>
+                <a href="/boarding/1">Boardings</a>
+                <a href="#">About Us</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="user-actions">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-regular fa-user"></i>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <div>
+            <h1 class="page-title">My Boarding Visit Requests</h1>
+            <p class="page-subtitle">Track the status of your submitted boarding room viewing requests</p>
+        </div>
+
+        <!-- Requests Grid -->
+        <div class="requests-grid">
+
+            <!-- Request Card 1 (Approved) -->
+            <div class="request-card">
+                <div class="request-card-header">
+                    <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="request-card-img" alt="Sunethra Boarding">
+                    <div class="status-badge-floating badge-approved">
+                        <i class="fa-solid fa-circle-check"></i> Request Approved
+                    </div>
+                </div>
+                <div class="request-card-body">
+                    <h3 class="request-title">Sunethra Girls Boarding</h3>
+                    <div class="request-location"><i class="fa-solid fa-location-dot"></i> Anuradhapura (1.2km from Campus)</div>
+
+                    <div class="info-row-item">
+                        <span class="info-label">Visit Date</span>
+                        <span class="info-value">Sep 06, 2026</span>
+                    </div>
+                    <div class="info-row-item">
+                        <span class="info-label">Monthly Rent</span>
+                        <span class="info-value" style="color: #7c3aed;">LKR 15,000</span>
+                    </div>
+                    <div class="info-row-item">
+                        <span class="info-label">Owner</span>
+                        <span class="info-value">Mrs. Sunethra Perera</span>
+                    </div>
+
+                    <div class="owner-contact-box">
+                        <div>
+                            <div style="font-size: 11px; color: var(--text-light);">Owner Phone</div>
+                            <div style="font-weight: 700; font-size: 13px; color: var(--text-dark);">077 123 4567</div>
+                        </div>
+                        <a href="tel:0771234567" class="btn-call-owner"><i class="fa-solid fa-phone"></i> Call Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Request Card 2 (Pending) -->
+            <div class="request-card">
+                <div class="request-card-header">
+                    <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="request-card-img" alt="Green View Annexe">
+                    <div class="status-badge-floating badge-pending">
+                        <i class="fa-solid fa-clock"></i> Pending Approval
+                    </div>
+                </div>
+                <div class="request-card-body">
+                    <h3 class="request-title">Green View Student Annexe</h3>
+                    <div class="request-location"><i class="fa-solid fa-location-dot"></i> Mihintale Town</div>
+
+                    <div class="info-row-item">
+                        <span class="info-label">Visit Date</span>
+                        <span class="info-value">Sep 07, 2026</span>
+                    </div>
+                    <div class="info-row-item">
+                        <span class="info-label">Monthly Rent</span>
+                        <span class="info-value" style="color: #7c3aed;">LKR 9,500</span>
+                    </div>
+                    <div class="info-row-item">
+                        <span class="info-label">Owner</span>
+                        <span class="info-value">Mr. Kamal Perera</span>
+                    </div>
+
+                    <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 10px; margin-top: 15px; font-size: 12px; color: #b45309; text-align: center;">
+                        <i class="fa-solid fa-hourglass-half"></i> Waiting for owner confirmation
+                    </div>
+                </div>
+            </div>
+
+            <!-- Request Card 3 (Rejected) -->
+            <div class="request-card">
+                <div class="request-card-header">
+                    <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="request-card-img" alt="Royal Hostel">
+                    <div class="status-badge-floating badge-rejected">
+                        <i class="fa-solid fa-circle-xmark"></i> Request Declined
+                    </div>
+                </div>
+                <div class="request-card-body">
+                    <h3 class="request-title">Royal Student Hostel</h3>
+                    <div class="request-location"><i class="fa-solid fa-location-dot"></i> Mihintale</div>
+
+                    <div class="info-row-item">
+                        <span class="info-label">Visit Date</span>
+                        <span class="info-value">Sep 04, 2026</span>
+                    </div>
+                    <div class="info-row-item">
+                        <span class="info-label">Monthly Rent</span>
+                        <span class="info-value" style="color: #7c3aed;">LKR 12,000</span>
+                    </div>
+                    <div class="info-row-item">
+                        <span class="info-label">Reason</span>
+                        <span class="info-value" style="color: #ef4444;">Fully Occupied</span>
+                    </div>
+
+                    <a href="/" class="btn-solid" style="width: 100%; display: block; text-align: center; text-decoration: none; padding: 8px; margin-top: 15px; font-size: 12px;">
+                        <i class="fa-solid fa-magnifying-glass"></i> Find Other Boardings
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
