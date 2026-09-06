@@ -47,6 +47,10 @@ def register():
         hashed_password = generate_password_hash(password)
         
         connection = get_db_connection()
+        if not connection:
+            flash('Database connection failed. Please try again later.', 'danger')
+            return render_template('register.html')
+
         try:
             with connection.cursor() as cursor:
                 sql = "INSERT INTO users (name, phone, email, password_hash, role) VALUES (%s, %s, %s, %s, %s)"
@@ -65,12 +69,14 @@ def register():
             return redirect(url_for('login')) 
             
         except pymysql.MySQLError as e:
-            connection.rollback() 
+            if connection:
+                connection.rollback() 
             flash('Email already used!', 'danger')
             print(f"Database error: {e}")
             
         finally:
-            connection.close()
+            if connection:
+                connection.close()
 
     return render_template('register.html')
 
@@ -85,6 +91,10 @@ def login():
         password = request.form.get('password')
 
         connection = get_db_connection()
+        if not connection:
+            flash('Database connection failed. Please try again later.', 'danger')
+            return render_template('login.html')
+
         try:
             with connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
@@ -102,14 +112,15 @@ def login():
                     elif user['role'] == 'admin':
                         return redirect(url_for('admin_dashboard'))
                 else:
-                    flash('Incorrect Password or Email', 'danger')
+                    flash('Invalid email or password!', 'danger')
                     
         except pymysql.MySQLError as e:
-            flash('Database Error!', 'danger')
+            flash('An error occurred during login.', 'danger')
             print(f"Database error: {e}")
             
         finally:
-            connection.close()
+            if connection:
+                connection.close()
 
     return render_template('login.html')
 
