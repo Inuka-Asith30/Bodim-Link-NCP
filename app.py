@@ -142,7 +142,7 @@ def student_dashboard():
         try:
             with connection.cursor() as cursor:
                 
-                cursor.execute("SELECT * FROM boardings ORDER BY id DESC")
+                cursor.execute("SELECT * FROM boardings WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) ORDER BY id DESC")
             
                 boardings = cursor.fetchall()
         except Exception as e:
@@ -240,6 +240,87 @@ def add_boarding():
             connection.close()
         
     return redirect(url_for('owner_dashboard'))
+
+
+# ----------------------------------------------------
+# New Features (Search & Visit Requests)
+# ----------------------------------------------------
+@app.route('/search', methods=['GET'])
+def search_boardings():
+    if 'user_id' not in session or session.get('user_role') != 'student':
+        return redirect(url_for('login'))
+        
+    location = request.args.get('location')
+    max_price = request.args.get('max_price')
+    gender = request.args.get('gender')
+
+    query = "SELECT * FROM boardings WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
+    params = []
+
+    if location:
+        query += " AND location LIKE %s"
+        params.append(f"%{location}%")
+    if max_price and max_price.strip():
+        query += " AND rent <= %s"
+        params.append(float(max_price))
+    if gender and gender != 'any':
+        query += " AND gender_preference = %s"
+        params.append(gender)
+
+    query += " ORDER BY id DESC"
+
+    connection = get_db_connection()
+    boardings = []
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(query, tuple(params))
+                boardings = cursor.fetchall()
+        except Exception as e:
+            print(f"Database error: {e}")
+        finally:
+            connection.close()
+
+    return render_template('student_dashboard.html', boardings=boardings)
+
+@app.route('/request_visit', methods=['POST'])
+def request_visit():
+    if 'user_id' not in session or session.get('user_role') != 'student':
+        flash('Please login as a student to book a visit.', 'danger')
+        return redirect(url_for('login'))
+    
+    boarding_id = request.form.get('boarding_id')
+    owner_id = request.form.get('owner_id')
+    visit_dates = request.form.get('visit_dates')
+    student_id = session['user_id']
+    
+    connection = get_db_connection()
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS visit_requests (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        student_id INT NOT NULL,
+                        boarding_id INT NOT NULL,
+                        owner_id INT NOT NULL,
+                        visit_dates VARCHAR(255) NOT NULL,
+                        status ENUM('pending', 'accepted', 'rejected') DEFAULT 'pending',
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                """)
+                sql = "INSERT INTO visit_requests (student_id, boarding_id, owner_id, visit_dates) VALUES (%s, %s, %s, %s)"
+                cursor.execute(sql, (student_id, boarding_id, owner_id, visit_dates))
+            connection.commit()
+            flash('Visit request sent to the owner successfully!', 'success')
+        except Exception as e:
+            print(f"Database error: {e}")
+            flash('Error sending visit request.', 'danger')
+        finally:
+            connection.close()
+            
+    return redirect(url_for('boarding_details', id=boarding_id))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
