@@ -187,7 +187,72 @@ def my_listings():
 def owner_bookings():
     if 'user_id' not in session or session.get('user_role') != 'owner':
         return redirect(url_for('login'))
-    return render_template('owner_bookings.html')
+        
+    owner_id = session['user_id']
+    connection = get_db_connection()
+    bookings = []
+    
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                sql = """
+                    SELECT vr.*, u.name as student_name, u.phone as student_phone, b.location as boarding_location
+                    FROM visit_requests vr
+                    JOIN users u ON vr.student_id = u.id
+                    JOIN boardings b ON vr.boarding_id = b.id
+                    WHERE vr.owner_id = %s
+                    ORDER BY vr.created_at DESC
+                """
+                cursor.execute(sql, (owner_id,))
+                bookings = cursor.fetchall()
+        except Exception as e:
+            print(f"Database error: {e}")
+        finally:
+            connection.close()
+            
+    return render_template('owner_bookings.html', bookings=bookings)
+
+@app.route('/accept_visit/<int:id>')
+def accept_visit(id):
+    if 'user_id' not in session or session.get('user_role') != 'owner':
+        return redirect(url_for('login'))
+        
+    connection = get_db_connection()
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("UPDATE visit_requests SET status = 'accepted' WHERE id = %s AND owner_id = %s", (id, session['user_id']))
+            connection.commit()
+            flash('Visit request accepted!', 'success')
+        except Exception as e:
+            connection.rollback()
+            print(f"Database error: {e}")
+            flash('Error accepting request.', 'danger')
+        finally:
+            connection.close()
+            
+    return redirect(url_for('owner_bookings'))
+
+@app.route('/reject_visit/<int:id>')
+def reject_visit(id):
+    if 'user_id' not in session or session.get('user_role') != 'owner':
+        return redirect(url_for('login'))
+        
+    connection = get_db_connection()
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("UPDATE visit_requests SET status = 'rejected' WHERE id = %s AND owner_id = %s", (id, session['user_id']))
+            connection.commit()
+            flash('Visit request rejected.', 'info')
+        except Exception as e:
+            connection.rollback()
+            print(f"Database error: {e}")
+            flash('Error rejecting request.', 'danger')
+        finally:
+            connection.close()
+            
+    return redirect(url_for('owner_bookings'))
 
 @app.route('/logout')
 def logout():
