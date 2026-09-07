@@ -85,6 +85,11 @@
                     </select>
                 </div>
 
+                <!-- Student Specific Message -->
+                <div id="student-fields" class="hidden" style="margin-bottom: 25px; padding: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-size: 13px; color: #166534;">
+                    <i class="fa-solid fa-circle-info"></i> <strong>Student Verification:</strong> An OTP will be sent to your Campus Email to verify your account.
+                </div>
+
                 <!-- Owner Specific Fields -->
                 <div id="owner-fields" class="hidden">
                     <label>Upload Electricity Bill (Verification)</label>
@@ -158,6 +163,23 @@
             }
         });
     });
+
+    function toggleOwnerFields() {
+        const role = document.getElementById('role').value;
+        const ownerFields = document.getElementById('owner-fields');
+        const studentFields = document.getElementById('student-fields');
+        
+        if (role === 'owner') {
+            ownerFields.classList.remove('hidden');
+            studentFields.classList.add('hidden');
+        } else if (role === 'student') {
+            studentFields.classList.remove('hidden');
+            ownerFields.classList.add('hidden');
+        } else {
+            ownerFields.classList.add('hidden');
+            studentFields.classList.add('hidden');
+        }
+    }
 
     function togglePassword(inputId, iconId) {
         const input = document.getElementById(inputId);
