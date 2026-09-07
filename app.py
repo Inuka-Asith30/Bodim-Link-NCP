@@ -197,7 +197,28 @@ def logout():
 
 @app.route('/boarding/<int:id>')
 def boarding_details(id):
-    return render_template('boarding_details.html')
+    connection = get_db_connection()
+    boarding = None
+    
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                #  Retrive bodinm info using its ID
+                cursor.execute("SELECT * FROM boardings WHERE id = %s", (id,))
+                boarding = cursor.fetchone() # using fetchone() because 1-bodim
+                
+        except Exception as e:
+            print(f"Database Error: {e}")
+        finally:
+            connection.close()
+            
+  
+    if not boarding:
+        flash('Cannot Find!', 'danger')
+        return redirect(url_for('student_dashboard'))
+        
+    # Send bodim data to front end
+    return render_template('boarding_details.html', boarding=boarding)
 
 @app.route('/student-requests')
 def student_requests():
