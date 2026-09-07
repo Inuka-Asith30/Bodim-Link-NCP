@@ -3,6 +3,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import pymysql
 import os
 from werkzeug.utils import secure_filename
+import random
+import smtplib
+from email.mime.text import MIMEText
 
 app = Flask(__name__)
 app.secret_key = "bodim_link_secret_key"
@@ -233,6 +236,7 @@ def accept_visit(id):
             
     return redirect(url_for('owner_bookings'))
 
+
 @app.route('/reject_visit/<int:id>')
 def reject_visit(id):
     if 'user_id' not in session or session.get('user_role') != 'owner':
@@ -406,6 +410,100 @@ def request_visit():
             connection.close()
             
     return redirect(url_for('boarding_details', id=boarding_id))
+
+# ----------------------------------------------------
+# Forgot Password & OTP Logic (Theneth)
+# ----------------------------------------------------
+MAIL_USERNAME = "your_project_email@gmail.com"
+MAIL_PASSWORD = "your_app_password_here"
+
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        
+        connection = get_db_connection()
+        if connection:
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+                    user = cursor.fetchone()
+                    
+                    if user:
+                        otp = str(random.randint(100000, 999999))
+                        session['reset_otp'] = otp
+                        session['reset_email'] = email
+                        
+                        try:
+                            msg = MIMEText(f"Your Bodim-Link NCP password reset OTP is: {otp}")
+                            msg['Subject'] = 'Password Reset OTP'
+                            msg['From'] = MAIL_USERNAME
+                            msg['To'] = email
+                            
+                            # Using Gmail SMTP - For testing, this might fail without real credentials,
+                            # but the logic is fully implemented.
+                            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+                            server.login(MAIL_USERNAME, MAIL_PASSWORD)
+                            server.send_message(msg)
+                            server.quit()
+                            
+                            flash('OTP has been sent to your email.', 'success')
+                            return redirect(url_for('verify_otp'))
+                        except Exception as e:
+                            print(f"Email sending failed: {e}")
+                            # FLASH OTP FOR LOCAL TESTING SINCE NO REAL EMAIL CONFIGURED
+                            flash(f'TESTING MODE: Your OTP is {otp}', 'info')
+                            return redirect(url_for('verify_otp'))
+                    else:
+                        flash('Email not found in our system.', 'danger')
+            finally:
+                connection.close()
+                
+    return render_template('forgot_password.html')
+
+@app.route('/verify_otp', methods=['GET', 'POST'])
+def verify_otp():
+    if request.method == 'POST':
+        user_otp = request.form.get('otp')
+        
+        if 'reset_otp' in session and session['reset_otp'] == user_otp:
+            flash('OTP Verified! Please enter your new password.', 'success')
+            return redirect(url_for('reset_password'))
+        else:
+            flash('Invalid OTP! Please try again.', 'danger')
+            
+    return render_template('verify_otp.html')
+
+@app.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    if 'reset_email' not in session or 'reset_otp' not in session:
+        return redirect(url_for('forgot_password'))
+        
+    if request.method == 'POST':
+        new_password = request.form.get('password')
+        hashed_password = generate_password_hash(new_password)
+        email = session['reset_email']
+        
+        connection = get_db_connection()
+        if connection:
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute("UPDATE users SET password_hash = %s WHERE email = %s", (hashed_password, email))
+                connection.commit()
+                
+                session.pop('reset_otp', None)
+                session.pop('reset_email', None)
+                
+                flash('Password reset successful! You can now login.', 'success')
+                return redirect(url_for('login'))
+            except Exception as e:
+                connection.rollback()
+                print(f"Database error: {e}")
+                flash('Failed to reset password.', 'danger')
+            finally:
+                connection.close()
+                
+    return render_template('reset_password.html')
 
 
 if __name__ == '__main__':
