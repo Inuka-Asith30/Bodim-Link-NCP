@@ -300,10 +300,23 @@ def student_requests():
 @app.route('/add_boarding', methods=['POST'])
 def add_boarding():
     owner_id = session.get('user_id', 1) 
-    location = request.form.get('location')
-    rent = request.form.get('rent')
-    amenities = request.form.get('amenities')
-    gender_preference = request.form.get('gender_preference')
+    
+    # Get all fields from HTML form
+    name = request.form.get('boarding_name', 'Unnamed Boarding')
+    location = request.form.get('location', '')
+    address = request.form.get('address', '')
+    monthly_rent = request.form.get('rent', 0)
+    security_deposit = request.form.get('deposit', 0)
+    gender_preference = request.form.get('gender_preference', 'any')
+    # boys -> male, girls -> female
+    if gender_preference == 'boys':
+        gender_preference = 'male'
+    elif gender_preference == 'girls':
+        gender_preference = 'female'
+        
+    boarding_type = request.form.get('type', 'Full Boarding')
+    description = request.form.get('description', '')
+    amenities = request.form.get('amenities', '')
     
     image_path = None
     if 'image' in request.files:
@@ -317,15 +330,33 @@ def add_boarding():
     if connection:
         try:
             with connection.cursor() as cursor:
+                # Add image_path column if it doesn't exist (safety check)
+                try:
+                    cursor.execute("ALTER TABLE boardings ADD COLUMN image_path VARCHAR(255)")
+                except:
+                    pass # Column already exists
+                    
                 sql = """
-                    INSERT INTO boardings (owner_id, location, rent, amenities, gender_preference, image_path)
-                    VALUES (%s, %s, %s, %s, %s, %s)
+                    INSERT INTO boardings (owner_id, name, location, address, monthly_rent, security_deposit, gender_preference, boarding_type, description, image_path)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
-                cursor.execute(sql, (owner_id, location, rent, amenities, gender_preference, image_path))
+                cursor.execute(sql, (owner_id, name, location, address, monthly_rent, security_deposit, gender_preference, boarding_type, description, image_path))
+                boarding_id = cursor.lastrowid
+                
+                # Insert facilities if amenities provided
+                if amenities:
+                    wifi = 1 if 'wifi' in amenities.lower() else 0
+                    meals = 1 if 'meal' in amenities.lower() else 0
+                    study = 1 if 'study' in amenities.lower() else 0
+                    cursor.execute("INSERT INTO facilities (boarding_id, wifi, meals, study_room) VALUES (%s, %s, %s, %s)", 
+                                  (boarding_id, wifi, meals, study))
+                                  
             connection.commit()
+            flash('Boarding added successfully!', 'success')
         except Exception as e:
             connection.rollback()
-            print(f"Error: {e}")
+            print(f"Error adding boarding: {e}")
+            flash('Error adding boarding. Please check your details.', 'danger')
         finally:
             connection.close()
         
