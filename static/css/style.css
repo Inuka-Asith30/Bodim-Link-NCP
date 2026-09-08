@@ -848,3 +848,5 @@ textarea.custom-input {
     font-size: 12px;
     color: var(--text-light);
 }
+
+.hidden { display: none !important; }
