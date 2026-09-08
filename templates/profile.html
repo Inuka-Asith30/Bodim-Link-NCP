@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="background: #f8fafc;">
+    <nav class="navbar">
+        <div class="nav-logo">
+            <i class="fa-solid fa-house-chimney"></i>
+            <div>Bodim - Link NCP<div style="font-size: 10px; color: #64748b;">Profile Settings</div></div>
+        </div>
+        <div class="nav-auth">
+            <a href="javascript:history.back()" class="btn-outline"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+    </nav>
+    <div style="max-width: 500px; margin: 40px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border);">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div style="width: 80px; height: 80px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; margin: 0 auto 15px auto;">
+                {{ session['user_name'][0]|upper if session.get('user_name') else 'U' }}
+            </div>
+            <h2 style="color: var(--text-color);">My Profile</h2>
+            <p style="color: #64748b; font-size: 14px;">Manage your account details</p>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div style="padding: 10px; margin-bottom: 20px; border-radius: 8px; font-size: 13px; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; text-align: center;">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <form action="/update_profile" method="POST">
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Full Name</label>
+            <div style="position: relative; margin-bottom: 20px;">
+                <i class="fa-solid fa-user" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
+                <input type="text" name="name" value="{{ session.get('user_name', '') }}" required style="width: 100%; padding: 12px 12px 12px 45px; border: 1px solid var(--border); border-radius: 8px;">
+            </div>
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Email Address (Cannot change)</label>
+            <div style="position: relative; margin-bottom: 20px;">
+                <i class="fa-solid fa-envelope" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                <input type="email" disabled value="Your registered email" style="width: 100%; padding: 12px 12px 12px 45px; border: 1px solid var(--border); border-radius: 8px; background: #f1f5f9; color: #64748b;">
+            </div>
+            <button type="submit" class="btn-solid" style="width: 100%; padding: 12px; border: none; cursor: pointer;">Update Profile <i class="fa-solid fa-check"></i></button>
+        </form>
+    </div>
+</body>
+</html>

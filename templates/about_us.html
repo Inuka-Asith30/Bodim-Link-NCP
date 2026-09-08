@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .about-header { background: var(--primary); color: white; padding: 60px 20px; text-align: center; }
+        .about-content { max-width: 800px; margin: 40px auto; padding: 20px; text-align: justify; line-height: 1.8; color: var(--text-color); }
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 40px; }
+        .team-card { background: white; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border); }
+        .team-card i { font-size: 40px; color: var(--primary); margin-bottom: 15px; }
+    </style>
+</head>
+<body style="background: #f8fafc;">
+    <nav class="navbar">
+        <div class="nav-logo">
+            <i class="fa-solid fa-house-chimney"></i>
+            <div>Bodim - Link NCP<div style="font-size: 10px; color: #64748b;">Student Accommodation & Boarding</div></div>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about_us" class="active">About Us</a></li>
+            <li><a href="/contact_us">Contact Us</a></li>
+        </ul>
+        <div class="nav-auth">
+            {% if session.get('user_id') %}
+                <a href="/logout" class="btn-outline"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+            {% else %}
+                <a href="/login" class="btn-outline">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="about-header">
+        <h1 style="font-size: 32px; margin-bottom: 10px;">About Bodim-Link NCP</h1>
+        <p style="opacity: 0.9;">Connecting University Students with Safe Boarding Places.</p>
+    </div>
+    <div class="about-content">
+        <h2 style="color: var(--primary); margin-bottom: 15px;">Our Mission</h2>
+        <p>Bodim-Link NCP is a dedicated platform built for university students in the North Central Province (Anuradhapura & Mihinthale). Finding a safe, affordable, and reliable boarding place has always been a challenge for students coming from different parts of the country. We bridge the gap between students and verified boarding owners to make this process completely hassle-free.</p>
+        <div class="team-grid">
+            <div class="team-card">
+                <i class="fa-solid fa-bullseye"></i>
+                <h3>Our Vision</h3>
+                <p style="font-size: 14px; color: #64748b; margin-top: 10px;">To be the most trusted student accommodation platform in Sri Lanka.</p>
+            </div>
+            <div class="team-card">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h3>100% Verified</h3>
+                <p style="font-size: 14px; color: #64748b; margin-top: 10px;">All boarding owners are strictly verified using electricity bills to ensure student safety.</p>
+            </div>
+            <div class="team-card">
+                <i class="fa-solid fa-handshake-angle"></i>
+                <h3>Easy Booking</h3>
+                <p style="font-size: 14px; color: #64748b; margin-top: 10px;">Students can request visits online without unnecessary phone calls.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -537,5 +537,48 @@ def reset_password():
     return render_template('reset_password.html')
 
 
+
+# ----------------------------------------------------
+# Static Pages & Profile Routes
+# ----------------------------------------------------
+@app.route('/about_us')
+def about_us():
+    return render_template('about_us.html')
+
+@app.route('/contact_us')
+def contact_us():
+    return render_template('contact_us.html')
+
+@app.route('/profile')
+def profile():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    return render_template('profile.html')
+
+@app.route('/update_profile', methods=['POST'])
+def update_profile():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+        
+    new_name = request.form.get('name')
+    user_id = session['user_id']
+    
+    connection = get_db_connection()
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("UPDATE users SET name = %s WHERE id = %s", (new_name, user_id))
+            connection.commit()
+            session['user_name'] = new_name
+            flash('Profile updated successfully!', 'success')
+        except Exception as e:
+            connection.rollback()
+            print(f"Error updating profile: {e}")
+            flash('Error updating profile.', 'danger')
+        finally:
+            connection.close()
+            
+    return redirect(url_for('profile'))
+
 if __name__ == '__main__':
     app.run(debug=True)

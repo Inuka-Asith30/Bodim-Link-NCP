@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="background: #f8fafc;">
+    <nav class="navbar">
+        <div class="nav-logo">
+            <i class="fa-solid fa-house-chimney"></i>
+            <div>Bodim - Link NCP<div style="font-size: 10px; color: #64748b;">Student Accommodation & Boarding</div></div>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about_us">About Us</a></li>
+            <li><a href="/contact_us" class="active">Contact Us</a></li>
+        </ul>
+    </nav>
+    <div style="max-width: 600px; margin: 50px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border);">
+        <h2 style="color: var(--primary); margin-bottom: 25px; text-align: center;">Get in Touch</h2>
+        <div style="display: flex; gap: 20px; margin-bottom: 30px; justify-content: center;">
+            <div style="text-align: center; color: var(--text-color);">
+                <i class="fa-solid fa-envelope" style="color: var(--primary); font-size: 24px; margin-bottom: 10px;"></i>
+                <p style="font-size: 14px;">support@bodimlink.lk</p>
+            </div>
+            <div style="text-align: center; color: var(--text-color);">
+                <i class="fa-solid fa-phone" style="color: var(--primary); font-size: 24px; margin-bottom: 10px;"></i>
+                <p style="font-size: 14px;">+94 77 123 4567</p>
+            </div>
+        </div>
+        <form action="#" method="POST" onsubmit="alert('Message Sent!'); return false;">
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Your Name</label>
+            <input type="text" required style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--border); border-radius: 8px;">
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Email Address</label>
+            <input type="email" required style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--border); border-radius: 8px;">
+            <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Message</label>
+            <textarea required rows="4" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--border); border-radius: 8px; resize: vertical;"></textarea>
+            <button type="submit" class="btn-solid" style="width: 100%; padding: 12px; border: none; cursor: pointer;">Send Message <i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+    </div>
+</body>
+</html>
