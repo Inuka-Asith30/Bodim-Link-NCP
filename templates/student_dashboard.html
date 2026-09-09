@@ -34,7 +34,56 @@
             </div>
         </div>
 
-               <div class="card-grid">
+               
+        <!-- Smart Search Filters -->
+        <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border);">
+            <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fa-solid fa-filter"></i> Smart Search</h3>
+            <form action="/search" method="GET" style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
+                
+                <div style="flex: 1; min-width: 200px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Location (City)</label>
+                    <div style="position: relative;">
+                        <i class="fa-solid fa-location-dot" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
+                        <input type="text" name="location" placeholder="e.g. Mihinthale" value="{{ request.args.get('location', '') }}" style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid var(--border); border-radius: 8px;">
+                    </div>
+                </div>
+
+                <div style="flex: 1; min-width: 150px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Max Budget (Rs)</label>
+                    <div style="position: relative;">
+                        <i class="fa-solid fa-coins" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
+                        <input type="number" name="max_price" placeholder="e.g. 15000" value="{{ request.args.get('max_price', '') }}" style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid var(--border); border-radius: 8px;">
+                    </div>
+                </div>
+
+                <div style="flex: 1; min-width: 150px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Gender</label>
+                    <div style="position: relative;">
+                        <i class="fa-solid fa-venus-mars" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
+                        <select name="gender" style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid var(--border); border-radius: 8px; appearance: none; background: white;">
+                            <option value="any" {% if request.args.get('gender') == 'any' %}selected{% endif %}>Any</option>
+                            <option value="male" {% if request.args.get('gender') == 'male' %}selected{% endif %}>Male Only</option>
+                            <option value="female" {% if request.args.get('gender') == 'female' %}selected{% endif %}>Female Only</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" class="btn-solid" style="padding: 12px 25px; border: none; cursor: pointer; height: 43px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-magnifying-glass"></i> Search
+                    </button>
+                </div>
+                
+                {% if request.args.get('location') or request.args.get('max_price') or request.args.get('gender') %}
+                <div>
+                    <a href="/student" class="btn-outline" style="padding: 12px 20px; height: 43px; display: flex; align-items: center; text-decoration: none; border-color: #ef4444; color: #ef4444;">
+                        <i class="fa-solid fa-xmark"></i> Clear
+                    </a>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+\n\n        <div class="card-grid">
             <!-- අර static කාඩ්ස් වෙනුවට අපි මෙතන Jinja Loop එකක් දානවා -->
             {% for boarding in boardings %}
             <div class="boarding-card">
