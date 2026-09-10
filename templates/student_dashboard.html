@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-
 <div class="dashboard-layout">
     <!-- Sidebar -->
     <div class="sidebar">
@@ -20,7 +19,6 @@
         </ul>
         <a href="/login" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
     </div>
-
     <!-- Main Content -->
     <div class="main-content">
         <div class="top-header">
@@ -33,13 +31,10 @@
                 Student
             </div>
         </div>
-
-               
         <!-- Smart Search Filters -->
         <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border);">
             <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fa-solid fa-filter"></i> Smart Search</h3>
             <form action="/search" method="GET" style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
-                
                 <div style="flex: 1; min-width: 200px;">
                     <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Location (City)</label>
                     <div style="position: relative;">
@@ -47,7 +42,6 @@
                         <input type="text" name="location" placeholder="e.g. Mihinthale" value="{{ request.args.get('location', '') }}" style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid var(--border); border-radius: 8px;">
                     </div>
                 </div>
-
                 <div style="flex: 1; min-width: 150px;">
                     <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Max Budget (Rs)</label>
                     <div style="position: relative;">
@@ -55,7 +49,6 @@
                         <input type="number" name="max_price" placeholder="e.g. 15000" value="{{ request.args.get('max_price', '') }}" style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid var(--border); border-radius: 8px;">
                     </div>
                 </div>
-
                 <div style="flex: 1; min-width: 150px;">
                     <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Gender</label>
                     <div style="position: relative;">
@@ -67,13 +60,11 @@
                         </select>
                     </div>
                 </div>
-
                 <div>
                     <button type="submit" class="btn-solid" style="padding: 12px 25px; border: none; cursor: pointer; height: 43px; display: flex; align-items: center; gap: 8px;">
                         <i class="fa-solid fa-magnifying-glass"></i> Search
                     </button>
                 </div>
-                
                 {% if request.args.get('location') or request.args.get('max_price') or request.args.get('gender') %}
                 <div>
                     <a href="/student" class="btn-outline" style="padding: 12px 20px; height: 43px; display: flex; align-items: center; text-decoration: none; border-color: #ef4444; color: #ef4444;">
@@ -84,38 +75,29 @@
             </form>
         </div>
 \n\n        <div class="card-grid">
-            <!-- අර static කාඩ්ස් වෙනුවට අපි මෙතන Jinja Loop එකක් දානවා -->
             {% for boarding in boardings %}
             <div class="boarding-card">
-                <!-- පින්තූරයක් දාලා නැත්නම් default පින්තූරයක් පෙන්වන්න -->
                 <img src="{{ url_for('static', filename=boarding.image_path) if boarding.image_path else 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' }}" alt="Room" class="card-img">
-                
                 <div class="card-content">
-                    <!-- Boys ද Girls ද කියලා අඳුරගන්න Badge එක -->
                     <span class="badge {{ 'boys' if boarding.gender_preference == 'boys' else 'girls' }}">
                         {{ boarding.gender_preference | capitalize }} Only
                     </span>
-                    
                     <h3 class="card-title">{{ boarding.location }} Boarding</h3>
-                    
                     <div class="card-details">
                         <span><i class="fa-solid fa-location-dot"></i> {{ boarding.location }}</span>
                         <span><i class="fa-solid fa-money-bill-wave"></i> Rs. {{ boarding.rent }} / month</span>
                         <span><i class="fa-solid fa-check"></i> {{ boarding.amenities }}</span>
                     </div>
-                    <!-- Theneth ගේ Task එකට අදාලව boarding details පිටුවට යන ලින්ක් එක -->
                     <a href="/boarding/{{ boarding.id }}" class="btn-action">Request Visit</a>
                 </div>
             </div>
             {% else %}
-            <!-- ඩේටාබේස් එකේ බෝඩිම් කිසිවක් නැත්නම් මේක පෙන්වනවා -->
             <div style="width: 100%; text-align: center; padding: 40px;">
-                <h3 style="color: #64748b;">දැනට බෝඩිම් කිසිවක් ඇතුලත් කර නොමැත.</h3>
+                <h3 style="color: #64748b;">No boardings have been listed yet.</h3>
             </div>
             {% endfor %}
         </div>
     </div>
 </div>
-
 </body>
 </html>
