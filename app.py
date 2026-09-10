@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 import random
 import smtplib
 from email.mime.text import MIMEText
+from notifications import send_welcome_email
 
 app = Flask(__name__)
 app.secret_key = "bodim_link_secret_key"
@@ -103,6 +104,10 @@ def register():
                 
                 return redirect(url_for('verify_register_otp'))
                 
+        except pymysql.MySQLError as e:
+            flash('An error occurred.', 'danger')
+            print(f"Database error: {e}")
+            
         finally:
             connection.close()
 
@@ -136,6 +141,9 @@ def verify_register_otp():
                             cursor.execute(bill_sql, (user_id, f"uploads/{data['bill_filename']}"))
                             
                     connection.commit()
+                    
+                    # --- Send Welcome Email (Venuri's Feature) ---
+                    send_welcome_email(data['email'], data['name'])
                     
                     # Clear session
                     session.pop('reg_data', None)
