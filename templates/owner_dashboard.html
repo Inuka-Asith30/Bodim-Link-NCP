@@ -41,18 +41,16 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <div class="top-nav">
-            <div class="top-links">
-                <a href="/">Home</a>
-                <a href="/student">For Students</a>
-                <a href="/owner" class="active">For Owners</a>
-                <a href="#">Boardings</a>
-                <a href="#">About Us</a>
-                <a href="#">Contact Us</a>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border);">
+            <div>
+                <h2 style="color: var(--text-color); margin: 0;">Owner Dashboard</h2>
+                <p style="color: #64748b; margin: 5px 0 0 0; font-size: 14px;">Manage your boardings and bookings</p>
             </div>
-            <div class="user-actions">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <i class="fa-regular fa-user"></i>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                    {{ session['user_name'][0]|upper if session.get('user_name') else 'O' }}
+                </div>
+                <span style="font-weight: 600; color: var(--text-color);">{{ session.get('user_name', 'Owner') }}</span>
             </div>
         </div>
 
