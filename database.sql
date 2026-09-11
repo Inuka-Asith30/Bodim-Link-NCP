@@ -29,6 +29,7 @@ CREATE TABLE boardings (
     total_rooms INT,
     available_seats INT,
     is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
