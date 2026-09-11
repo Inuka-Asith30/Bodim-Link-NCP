@@ -241,102 +241,63 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Request Row 1 -->
+                        {% for req in bookings %}
                         <tr>
                             <td>
                                 <div class="student-profile-meta">
-                                    <div class="student-avatar-circle">K</div>
+                                    <div class="student-avatar-circle" style="background:#fce7f3; color:#be185d;">
+                                        {{ req.student_name[0]|upper if req.student_name else 'S' }}
+                                    </div>
                                     <div>
-                                        <div class="student-name">Kasun Kalhara</div>
-                                        <div class="student-sub">Rajarata University Student</div>
+                                        <div class="student-name">{{ req.student_name }}</div>
+                                        <div class="student-sub">Student</div>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <strong>Sunethra Girls Boarding</strong>
-                                <div style="font-size: 12px; color: var(--text-light);">Anuradhapura</div>
+                                <strong>{{ req.boarding_name }}</strong>
+                                <div style="font-size: 12px; color: var(--text-light);">{{ req.boarding_location }}</div>
                             </td>
                             <td>
-                                <div><i class="fa-regular fa-calendar" style="color: #7c3aed;"></i> Sep 06, 2026</div>
-                                <div style="font-size: 12px; color: var(--text-light);">10:30 AM</div>
+                                <div><i class="fa-regular fa-calendar" style="color: #7c3aed;"></i> {{ req.visit_dates }}</div>
                             </td>
                             <td>
-                                <a href="tel:0712345678" class="contact-pill"><i class="fa-solid fa-phone"></i> 071 234 5678</a>
+                                {% if req.student_phone %}
+                                <a href="tel:{{ req.student_phone }}" class="contact-pill"><i class="fa-solid fa-phone"></i> {{ req.student_phone }}</a>
+                                {% else %}
+                                <span style="font-size:12px; color:#94a3b8;">No phone</span>
+                                {% endif %}
                             </td>
                             <td>
+                                {% if req.status == 'pending' %}
                                 <span class="badge-status badge-pending"><i class="fa-solid fa-clock"></i> Pending</span>
-                            </td>
-                            <td style="text-align: right;">
-                                <div style="display: flex; gap: 8px; justify-content: flex-end;">
-                                    <button class="btn-action-accept" onclick="alert('Request Accepted!')"><i class="fa-solid fa-check"></i> Accept</button>
-                                    <button class="btn-action-reject" onclick="alert('Request Rejected!')"><i class="fa-solid fa-xmark"></i> Reject</button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Request Row 2 -->
-                        <tr>
-                            <td>
-                                <div class="student-profile-meta">
-                                    <div class="student-avatar-circle" style="background:#fce7f3; color:#be185d;">N</div>
-                                    <div>
-                                        <div class="student-name">Nipuni Perera</div>
-                                        <div class="student-sub">Applied Sciences Dept.</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <strong>Green View Annexe</strong>
-                                <div style="font-size: 12px; color: var(--text-light);">Mihintale</div>
-                            </td>
-                            <td>
-                                <div><i class="fa-regular fa-calendar" style="color: #7c3aed;"></i> Sep 07, 2026</div>
-                                <div style="font-size: 12px; color: var(--text-light);">02:00 PM</div>
-                            </td>
-                            <td>
-                                <a href="tel:0779876543" class="contact-pill"><i class="fa-solid fa-phone"></i> 077 987 6543</a>
-                            </td>
-                            <td>
-                                <span class="badge-status badge-pending"><i class="fa-solid fa-clock"></i> Pending</span>
-                            </td>
-                            <td style="text-align: right;">
-                                <div style="display: flex; gap: 8px; justify-content: flex-end;">
-                                    <button class="btn-action-accept" onclick="alert('Request Accepted!')"><i class="fa-solid fa-check"></i> Accept</button>
-                                    <button class="btn-action-reject" onclick="alert('Request Rejected!')"><i class="fa-solid fa-xmark"></i> Reject</button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Request Row 3 (Approved) -->
-                        <tr>
-                            <td>
-                                <div class="student-profile-meta">
-                                    <div class="student-avatar-circle" style="background:#e0f2fe; color:#0369a1;">S</div>
-                                    <div>
-                                        <div class="student-name">Sahan Sithumina</div>
-                                        <div class="student-sub">Management Faculty</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <strong>Sunethra Girls Boarding</strong>
-                                <div style="font-size: 12px; color: var(--text-light);">Anuradhapura</div>
-                            </td>
-                            <td>
-                                <div><i class="fa-regular fa-calendar" style="color: #7c3aed;"></i> Sep 04, 2026</div>
-                                <div style="font-size: 12px; color: var(--text-light);">04:00 PM</div>
-                            </td>
-                            <td>
-                                <a href="tel:0701122334" class="contact-pill"><i class="fa-solid fa-phone"></i> 070 112 2334</a>
-                            </td>
-                            <td>
+                                {% elif req.status == 'accepted' %}
                                 <span class="badge-status badge-approved"><i class="fa-solid fa-circle-check"></i> Approved</span>
+                                {% else %}
+                                <span class="badge-status" style="background:#fee2e2; color:#991b1b;"><i class="fa-solid fa-xmark"></i> Rejected</span>
+                                {% endif %}
                             </td>
-                            <td style="text-align: right; color: var(--text-light); font-size: 12px;">
-                                Accepted on Sep 03
+                            <td style="text-align: right;">
+                                {% if req.status == 'pending' %}
+                                <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                                    <a href="/accept_visit/{{ req.id }}" class="btn-action-accept" style="text-decoration:none; display:inline-block; padding:6px 12px; border-radius:6px;"><i class="fa-solid fa-check"></i> Accept</a>
+                                    <a href="/reject_visit/{{ req.id }}" class="btn-action-reject" style="text-decoration:none; display:inline-block; padding:6px 12px; border-radius:6px; background:#ef4444; color:white;"><i class="fa-solid fa-xmark"></i> Reject</a>
+                                </div>
+                                {% elif req.status == 'accepted' %}
+                                <div style="color: var(--text-light); font-size: 12px;">Accepted on <br>{{ req.created_at.strftime('%b %d') if req.created_at else '' }}</div>
+                                {% else %}
+                                <div style="color: var(--text-light); font-size: 12px;">Rejected</div>
+                                {% endif %}
                             </td>
                         </tr>
-
+                        {% else %}
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 40px; color: #64748b;">
+                                <i class="fa-solid fa-inbox" style="font-size: 30px; margin-bottom: 10px; color: #cbd5e1; display:block;"></i>
+                                No visit requests found.
+                            </td>
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>

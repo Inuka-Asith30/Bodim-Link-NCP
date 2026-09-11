@@ -270,7 +270,7 @@ def owner_bookings():
         try:
             with connection.cursor() as cursor:
                 sql = """
-                    SELECT vr.*, u.name as student_name, u.phone as student_phone, b.location as boarding_location
+                    SELECT vr.*, u.name as student_name, u.phone as student_phone, b.location as boarding_location, b.name as boarding_name
                     FROM visit_requests vr
                     JOIN users u ON vr.student_id = u.id
                     JOIN boardings b ON vr.boarding_id = b.id
@@ -296,11 +296,38 @@ def accept_visit(id):
         try:
             with connection.cursor() as cursor:
                 cursor.execute("UPDATE visit_requests SET status = 'accepted' WHERE id = %s AND owner_id = %s", (id, session['user_id']))
+                
+                # Fetch student email to send notification
+                cursor.execute("""
+                    SELECT u.email, u.name, b.name as boarding_name, v.visit_dates 
+                    FROM visit_requests v
+                    JOIN users u ON v.student_id = u.id
+                    JOIN boardings b ON v.boarding_id = b.id
+                    WHERE v.id = %s
+                """, (id,))
+                request_data = cursor.fetchone()
+                
             connection.commit()
+            
+            # Send Notification Email to Student
+            if request_data:
+                try:
+                    msg = MIMEText(f"Hello {request_data['name']},\n\nGood news! Your visit request for '{request_data['boarding_name']}' on {request_data['visit_dates']} has been ACCEPTED by the owner.\n\nPlease contact the owner to confirm the exact time.\n\nThank you!")
+                    msg['Subject'] = 'Visit Request Accepted'
+                    msg['From'] = MAIL_USERNAME
+                    msg['To'] = request_data['email']
+                    
+                    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+                    server.login(MAIL_USERNAME, MAIL_PASSWORD)
+                    server.send_message(msg)
+                    server.quit()
+                except Exception as e:
+                    print(f"Notification email failed: {e}")
+                    
             flash('Visit request accepted!', 'success')
         except Exception as e:
             connection.rollback()
-            print(f"Database error: {e}")
+            print(f"Error: {e}")
             flash('Error accepting request.', 'danger')
         finally:
             connection.close()
@@ -343,9 +370,14 @@ def boarding_details(id):
     if connection:
         try:
             with connection.cursor() as cursor:
-                #  Retrive bodinm info using its ID
-                cursor.execute("SELECT * FROM boardings WHERE id = %s", (id,))
-                boarding = cursor.fetchone() # using fetchone() because 1-bodim
+                # Retrive bodinm info and owner info using JOIN
+                cursor.execute("""
+                    SELECT b.*, u.name AS owner_name, u.phone AS owner_phone 
+                    FROM boardings b 
+                    JOIN users u ON b.owner_id = u.id 
+                    WHERE b.id = %s
+                """, (id,))
+                boarding = cursor.fetchone()
                 
         except Exception as e:
             print(f"Database Error: {e}")
@@ -503,7 +535,33 @@ def request_visit():
                 """)
                 sql = "INSERT INTO visit_requests (student_id, boarding_id, owner_id, visit_dates) VALUES (%s, %s, %s, %s)"
                 cursor.execute(sql, (student_id, boarding_id, owner_id, visit_dates))
+                
+                # Fetch Owner Email to send notification
+                cursor.execute("SELECT email, name FROM users WHERE id = %s", (owner_id,))
+                owner = cursor.fetchone()
+                
+                cursor.execute("SELECT name FROM boardings WHERE id = %s", (boarding_id,))
+                boarding = cursor.fetchone()
+                
+                student_name = session.get('user_name', 'A student')
+                
             connection.commit()
+            
+            # Send Email Notification to Owner
+            if owner and boarding:
+                try:
+                    msg = MIMEText(f"Hello {owner['name']},\n\n{student_name} has requested to visit your boarding ({boarding['name']}) on the following dates: {visit_dates}.\n\nPlease log in to Bodim-Link NCP to accept or reject this request.\n\nThank you!")
+                    msg['Subject'] = 'New Boarding Visit Request'
+                    msg['From'] = MAIL_USERNAME
+                    msg['To'] = owner['email']
+                    
+                    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+                    server.login(MAIL_USERNAME, MAIL_PASSWORD)
+                    server.send_message(msg)
+                    server.quit()
+                except Exception as e:
+                    print(f"Notification email failed: {e}")
+                    
             flash('Visit request sent to the owner successfully!', 'success')
         except Exception as e:
             print(f"Database error: {e}")
@@ -616,8 +674,31 @@ def reset_password():
 def about_us():
     return render_template('about_us.html')
 
-@app.route('/contact_us')
+@app.route('/contact_us', methods=['GET', 'POST'])
 def contact_us():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        user_msg = request.form.get('message')
+        
+        try:
+            msg = MIMEText(f"Name: {name}\nEmail: {email}\n\nMessage:\n{user_msg}")
+            msg['Subject'] = 'New Contact Us Message'
+            msg['From'] = MAIL_USERNAME
+            msg['To'] = MAIL_USERNAME # Send to admin's own email
+            
+            server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+            server.login(MAIL_USERNAME, MAIL_PASSWORD)
+            server.send_message(msg)
+            server.quit()
+            
+            flash('Your message has been sent successfully!', 'success')
+        except Exception as e:
+            print(f"Contact Us email failed: {e}")
+            flash('Failed to send message. Please try again later.', 'danger')
+            
+        return redirect(url_for('contact_us'))
+        
     return render_template('contact_us.html')
 
 @app.route('/profile')

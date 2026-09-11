@@ -95,12 +95,27 @@
                     <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
 
                     <div class="owner-info">
-                        <div class='owner-avatar'>O</div>
+                        <div class='owner-avatar'>{{ boarding.owner_name[0]|upper if boarding.owner_name else 'O' }}</div>
                         <div>
-                            <h4>Owner</h4>
+                            <h4>{{ boarding.owner_name or 'Owner' }}</h4>
                             <p>Verified Owner <i class="fa-solid fa-circle-check" style="color: #10b981;"></i></p>
                         </div>
                     </div>
+
+                    {% if boarding.owner_phone %}
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <a href="tel:{{ boarding.owner_phone }}" class="btn-outline" style="flex: 1; text-align: center; text-decoration: none; padding: 10px; font-size: 14px; border-color: #3b82f6; color: #3b82f6;">
+                            <i class="fa-solid fa-phone"></i> Call
+                        </a>
+                        {% set wa_num = boarding.owner_phone %}
+                        {% if wa_num.startswith('0') %}
+                            {% set wa_num = '94' ~ wa_num[1:] %}
+                        {% endif %}
+                        <a href="https://wa.me/{{ wa_num }}" target="_blank" class="btn-outline" style="flex: 1; text-align: center; text-decoration: none; padding: 10px; font-size: 14px; border-color: #25D366; color: #25D366;">
+                            <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                        </a>
+                    </div>
+                    {% endif %}
 
                     <button id="bookVisitBtn" class="btn-solid" style="width: 100%; margin-top: 20px; font-size: 16px; padding: 15px;">
                         <i class="fa-solid fa-paper-plane"></i> Request Visit

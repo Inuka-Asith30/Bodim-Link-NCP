@@ -31,13 +31,25 @@
                 <p style="font-size: 14px;">+94 77 123 4567</p>
             </div>
         </div>
-        <form action="#" method="POST" onsubmit="alert('Message Sent!'); return false;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+                <div style="padding: 10px; margin-bottom: 20px; border-radius: 8px; font-size: 14px; 
+                {% if category == 'success' %}background: #dcfce7; color: #166534; border: 1px solid #bbf7d0;
+                {% else %}background: #fee2e2; color: #991b1b; border: 1px solid #fecaca;{% endif %}">
+                {{ message }}
+                </div>
+            {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="/contact_us" method="POST">
             <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Your Name</label>
-            <input type="text" required style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--border); border-radius: 8px;">
+            <input type="text" name="name" required style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--border); border-radius: 8px;">
             <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Email Address</label>
-            <input type="email" required style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--border); border-radius: 8px;">
+            <input type="email" name="email" required style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--border); border-radius: 8px;">
             <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Message</label>
-            <textarea required rows="4" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--border); border-radius: 8px; resize: vertical;"></textarea>
+            <textarea name="message" required rows="4" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--border); border-radius: 8px; resize: vertical;"></textarea>
             <button type="submit" class="btn-solid" style="width: 100%; padding: 12px; border: none; cursor: pointer;">Send Message <i class="fa-solid fa-paper-plane"></i></button>
         </form>
     </div>
