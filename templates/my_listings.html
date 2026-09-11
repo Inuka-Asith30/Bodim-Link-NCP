@@ -246,97 +246,51 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Listing Item 1 -->
+                        {% for boarding in boardings %}
                         <tr>
                             <td>
                                 <div class="boarding-meta">
-                                    <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" class="boarding-thumb" alt="Sunethra Girls Boarding">
+                                    {% if boarding.image_path %}
+                                        <img src="{{ url_for('static', filename=boarding.image_path.replace('uploads/', 'uploads/')) }}" class="boarding-thumb" alt="{{ boarding.name }}">
+                                    {% else %}
+                                        <div class="boarding-thumb" style="display:flex; align-items:center; justify-content:center; background:#eee; color:#999;"><i class="fa-solid fa-house"></i></div>
+                                    {% endif %}
                                     <div>
-                                        <div class="boarding-title-text">Sunethra Girls Boarding</div>
-                                        <div class="boarding-loc-text"><i class="fa-solid fa-location-dot"></i> Anuradhapura</div>
+                                        <div class="boarding-title">{{ boarding.name }}</div>
+                                        <div class="boarding-location"><i class="fa-solid fa-location-dot"></i> {{ boarding.location }}</div>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <span class="badge girls"><i class="fa-solid fa-person-dress"></i> Girls Only</span>
+                                {% if boarding.gender_preference == 'female' or boarding.gender_preference == 'girls' %}
+                                    <span class="badge girls"><i class="fa-solid fa-person-dress"></i> Girls Only</span>
+                                {% elif boarding.gender_preference == 'male' or boarding.gender_preference == 'boys' %}
+                                    <span class="badge boys"><i class="fa-solid fa-person"></i> Boys Only</span>
+                                {% else %}
+                                    <span class="badge" style="background:#e2e8f0; color:#475569;"><i class="fa-solid fa-users"></i> Any</span>
+                                {% endif %}
                             </td>
                             <td>
-                                <strong style="color: #7c3aed;">LKR 15,000</strong>
-                            </td>
-                            <td>
-                                <strong>8</strong> / 10 Seats
-                            </td>
-                            <td>
-                                <span class="status-pill status-active"><i class="fa-solid fa-circle-check"></i> Verified</span>
-                            </td>
-                            <td style="text-align: right;">
-                                <a href="/boarding/1" class="action-icon-btn" title="View Public Page"><i class="fa-solid fa-eye"></i></a>
-                                <a href="#" class="action-icon-btn" title="Edit Listing"><i class="fa-solid fa-pen"></i></a>
-                                <a href="#" class="action-icon-btn delete-btn" title="Delete Listing" onclick="confirm('Are you sure you want to delete this listing?')"><i class="fa-solid fa-trash"></i></a>
-                            </td>
-                        </tr>
-
-                        <!-- Listing Item 2 -->
-                        <tr>
-                            <td>
-                                <div class="boarding-meta">
-                                    <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" class="boarding-thumb" alt="Mihintale Student Villa">
-                                    <div>
-                                        <div class="boarding-title-text">Mihintale Student Villa</div>
-                                        <div class="boarding-loc-text"><i class="fa-solid fa-location-dot"></i> Mihintale Town</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="badge boys"><i class="fa-solid fa-person"></i> Boys Only</span>
-                            </td>
-                            <td>
-                                <strong style="color: #7c3aed;">LKR 9,500</strong>
-                            </td>
-                            <td>
-                                <strong>4</strong> / 6 Seats
-                            </td>
-                            <td>
-                                <span class="status-pill status-active"><i class="fa-solid fa-circle-check"></i> Verified</span>
-                            </td>
-                            <td style="text-align: right;">
-                                <a href="/boarding/1" class="action-icon-btn" title="View Public Page"><i class="fa-solid fa-eye"></i></a>
-                                <a href="#" class="action-icon-btn" title="Edit Listing"><i class="fa-solid fa-pen"></i></a>
-                                <a href="#" class="action-icon-btn delete-btn" title="Delete Listing" onclick="confirm('Are you sure you want to delete this listing?')"><i class="fa-solid fa-trash"></i></a>
-                            </td>
-                        </tr>
-
-                        <!-- Listing Item 3 -->
-                        <tr>
-                            <td>
-                                <div class="boarding-meta">
-                                    <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" class="boarding-thumb" alt="Green View Annexe">
-                                    <div>
-                                        <div class="boarding-title-text">Green View Annexe</div>
-                                        <div class="boarding-loc-text"><i class="fa-solid fa-location-dot"></i> Anuradhapura</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="badge girls"><i class="fa-solid fa-person-dress"></i> Girls Only</span>
-                            </td>
-                            <td>
-                                <strong style="color: #7c3aed;">LKR 12,000</strong>
-                            </td>
-                            <td>
-                                <strong>2</strong> / 4 Seats
+                                <strong style="color: #7c3aed;">LKR {{ "{:,.0f}".format(boarding.monthly_rent) }}</strong>
                             </td>
                             <td>
                                 <span class="status-pill status-pending"><i class="fa-solid fa-clock"></i> Pending Review</span>
                             </td>
                             <td style="text-align: right;">
-                                <a href="/boarding/1" class="action-icon-btn" title="View Public Page"><i class="fa-solid fa-eye"></i></a>
-                                <a href="#" class="action-icon-btn" title="Edit Listing"><i class="fa-solid fa-pen"></i></a>
-                                <a href="#" class="action-icon-btn delete-btn" title="Delete Listing" onclick="confirm('Are you sure you want to delete this listing?')"><i class="fa-solid fa-trash"></i></a>
+                                <a href="/boarding/{{ boarding.id }}" class="action-icon-btn" title="View Public Page"><i class="fa-solid fa-eye"></i></a>
+                                <form action="/delete_boarding/{{ boarding.id }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="action-icon-btn delete-btn" title="Delete Listing" onclick="return confirm('Are you sure you want to delete this listing?')" style="border:none; cursor:pointer; font-size:16px; padding:8px 12px;"><i class="fa-solid fa-trash"></i></button>
+                                </form>
                             </td>
                         </tr>
-
-                    </tbody>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 30px; color: #666;">
+                                You haven't added any boardings yet.
+                            </td>
+                        </tr>
+                        {% endfor %}
+</tbody>
                 </table>
             </div>
         </div>

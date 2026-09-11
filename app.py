@@ -664,5 +664,38 @@ def settings():
         return redirect(url_for('login'))
     return render_template('settings.html')
 
+
+@app.route('/delete_boarding/<int:id>', methods=['POST'])
+def delete_boarding(id):
+    if 'user_id' not in session or session.get('user_role') != 'owner':
+        return redirect(url_for('login'))
+        
+    owner_id = session['user_id']
+    connection = get_db_connection()
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                # Verify ownership before deleting
+                cursor.execute("SELECT * FROM boardings WHERE id = %s AND owner_id = %s", (id, owner_id))
+                if cursor.fetchone():
+                    # Delete facilities first (foreign key constraints)
+                    cursor.execute("DELETE FROM facilities WHERE boarding_id = %s", (id,))
+                    # Delete reviews
+                    cursor.execute("DELETE FROM reviews WHERE boarding_id = %s", (id,))
+                    # Finally delete boarding
+                    cursor.execute("DELETE FROM boardings WHERE id = %s", (id,))
+                    connection.commit()
+                    flash('Boarding deleted successfully.', 'success')
+                else:
+                    flash('Unauthorized to delete this boarding.', 'danger')
+        except Exception as e:
+            print(f"Error deleting: {e}")
+            connection.rollback()
+            flash('Error occurred while deleting.', 'danger')
+        finally:
+            connection.close()
+            
+    return redirect(url_for('my_listings'))
+
 if __name__ == '__main__':
     app.run(debug=True)
