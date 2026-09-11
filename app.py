@@ -651,5 +651,18 @@ def update_profile():
             
     return redirect(url_for('profile'))
 
+
+@app.route('/messages')
+def messages():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    return render_template('messages.html')
+
+@app.route('/settings')
+def settings():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    return render_template('settings.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
