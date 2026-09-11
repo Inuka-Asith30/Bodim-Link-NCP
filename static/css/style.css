@@ -986,3 +986,81 @@ textarea.custom-input {
         overflow-x: hidden;
     }
 }
+
+
+/* --- CORRECTED MOBILE RESPONSIVENESS --- */
+@media (max-width: 768px) {
+    /* Navbar */
+    .navbar {
+        flex-direction: column;
+        padding: 15px;
+        align-items: center;
+        text-align: center;
+    }
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin: 15px 0;
+        padding: 0;
+    }
+    .nav-auth {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+    .nav-auth a {
+        width: 100%;
+        text-align: center;
+        display: block;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        padding: 40px 15px;
+        height: auto;
+        min-height: auto;
+    }
+    .hero-title {
+        font-size: 32px !important;
+        line-height: 1.2;
+        word-break: break-word; /* Fixes Anuradhapura overflow */
+        hyphens: auto;
+    }
+    .hero-title span {
+        display: block; /* Puts "Anuradhapura & Mihinthale" on a new line and wraps */
+    }
+    .hero-desc {
+        font-size: 15px;
+    }
+    .hero-section > div[style*="display: flex"] {
+        flex-direction: column; /* Buttons below hero text */
+        width: 100%;
+    }
+    .hero-section > div > a {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+        flex-direction: column;
+        border-radius: 10px;
+        padding: 20px;
+        gap: 20px;
+        margin: 20px 15px;
+        width: calc(100% - 30px);
+        box-sizing: border-box;
+    }
+    .stat-item {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    /* Prevent horizontal scrolling globally */
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+}
