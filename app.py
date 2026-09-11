@@ -47,8 +47,6 @@ def register():
         role = request.form.get('role')
         password = request.form.get('password')
         
-        hashed_password = generate_password_hash(password)
-        
         connection = get_db_connection()
         if not connection:
             flash('Database connection failed. Please try again later.', 'danger')
@@ -56,32 +54,105 @@ def register():
 
         try:
             with connection.cursor() as cursor:
-                sql = "INSERT INTO users (name, phone, email, password_hash, role) VALUES (%s, %s, %s, %s, %s)"
-                cursor.execute(sql, (name, phone, email, hashed_password, role))
+                #  Check if email already exists
+                cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
+                if cursor.fetchone():
+                    flash('Email already used!', 'danger')
+                    return render_template('register.html')
                 
-                # If owner uploads bill (optional as per original logic)
+                #  Save file if owner
+                bill_filename = None
                 if role == 'owner' and 'electricity_bill' in request.files:
                     bill_file = request.files['electricity_bill']
                     if bill_file.filename != '':
                         filename = secure_filename(bill_file.filename)
                         bill_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                         bill_file.save(bill_path)
-                        
-            connection.commit() 
-            flash('Registration Successful! Please login.', 'success')
-            return redirect(url_for('login')) 
-            
-        except pymysql.MySQLError as e:
-            if connection:
-                connection.rollback() 
-            flash('Email already used!', 'danger')
-            print(f"Database error: {e}")
-            
+                        bill_filename = filename
+                
+                #  Generate OTP
+                otp = str(random.randint(100000, 999999))
+                
+                #  Save details temporarily in session
+                session['reg_data'] = {
+                    'name': name,
+                    'phone': phone,
+                    'email': email,
+                    'password': password,  # We will hash it later after verification
+                    'role': role,
+                    'bill_filename': bill_filename
+                }
+                session['reg_otp'] = otp
+                
+                #  Send OTP Email
+                try:
+                    msg = MIMEText(f"Welcome to Bodim-Link NCP! Your registration verification OTP is: {otp}")
+                    msg['Subject'] = 'Account Verification OTP'
+                    msg['From'] = MAIL_USERNAME
+                    msg['To'] = email
+                    
+                    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+                    server.login(MAIL_USERNAME, MAIL_PASSWORD)
+                    server.send_message(msg)
+                    server.quit()
+                    
+                    flash('An OTP has been sent to your email to verify your account.', 'success')
+                except Exception as e:
+                    print(f"Email sending failed: {e}")
+                    flash(f'TESTING MODE: Your Registration OTP is {otp}', 'info')
+                
+                return redirect(url_for('verify_register_otp'))
+                
         finally:
-            if connection:
-                connection.close()
+            connection.close()
 
     return render_template('register.html')
+
+@app.route('/verify_register_otp', methods=['GET', 'POST'])
+def verify_register_otp():
+    if 'reg_data' not in session or 'reg_otp' not in session:
+        flash('Session expired. Please register again.', 'danger')
+        return redirect(url_for('register'))
+        
+    if request.method == 'POST':
+        user_otp = request.form.get('otp')
+        
+        if user_otp == session['reg_otp']:
+            # Verification successful! Save to database.
+            data = session['reg_data']
+            hashed_password = generate_password_hash(data['password'])
+            
+            connection = get_db_connection()
+            if connection:
+                try:
+                    with connection.cursor() as cursor:
+                        sql = "INSERT INTO users (name, phone, email, password_hash, role) VALUES (%s, %s, %s, %s, %s)"
+                        cursor.execute(sql, (data['name'], data['phone'], data['email'], hashed_password, data['role']))
+                        user_id = cursor.lastrowid
+                        
+                        # Save bill verification if owner
+                        if data['role'] == 'owner' and data.get('bill_filename'):
+                            bill_sql = "INSERT INTO owner_verifications (owner_id, bill_image_path) VALUES (%s, %s)"
+                            cursor.execute(bill_sql, (user_id, f"uploads/{data['bill_filename']}"))
+                            
+                    connection.commit()
+                    
+                    # Clear session
+                    session.pop('reg_data', None)
+                    session.pop('reg_otp', None)
+                    
+                    flash('Registration Successful! Your account has been verified. Please login.', 'success')
+                    return redirect(url_for('login'))
+                except Exception as e:
+                    connection.rollback()
+                    print(f"Database error during registration: {e}")
+                    flash('Error creating account. Please try again.', 'danger')
+                finally:
+                    connection.close()
+        else:
+            flash('Invalid OTP! Please try again.', 'danger')
+            
+    return render_template('verify_register_otp.html')
 
 
 # ----------------------------------------------------
@@ -445,8 +516,8 @@ def request_visit():
 # ----------------------------------------------------
 # Forgot Password & OTP Logic (Theneth)
 # ----------------------------------------------------
-MAIL_USERNAME = "your_project_email@gmail.com"
-MAIL_PASSWORD = "your_app_password_here"
+MAIL_USERNAME = "email_email@gmail.com"
+MAIL_PASSWORD = "app_password"
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
