@@ -1093,3 +1093,25 @@ textarea.custom-input {
         margin-top: 10px;
     }
 }
+
+/* --- MOBILE FIX FOR HERO BUTTONS & OVERLAP --- */
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+}
+@media (max-width: 768px) {
+    .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 40px;
+    }
+    .hero-buttons a {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+        display: block;
+    }
+    .search-box {
+        margin-top: 0px !important; /* Prevent overlapping */
+    }
+}
