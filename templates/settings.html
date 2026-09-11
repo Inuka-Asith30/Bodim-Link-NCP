@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="background: #f8fafc; font-family: 'Poppins', sans-serif;">
+    <div style="max-width: 600px; margin: 50px auto; padding: 30px; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 30px;">
+            <h2 style="color: var(--primary);"><i class="fa-solid fa-gear"></i> Account Settings</h2>
+            <a href="javascript:history.back()" style="color: var(--text-light); text-decoration: none;"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+        
+        <form action="#" method="GET">
+            <h4 style="margin-bottom: 15px; color: #333;">Change Password</h4>
+            <div style="margin-bottom: 15px;">
+                <label style="display:block; margin-bottom:5px; color:#666;">Current Password</label>
+                <input type="password" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" placeholder="Enter current password">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="display:block; margin-bottom:5px; color:#666;">New Password</label>
+                <input type="password" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" placeholder="Enter new password">
+            </div>
+            
+            <h4 style="margin-top: 30px; margin-bottom: 15px; color: #333;">Notification Preferences</h4>
+            <div style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="email_notif" checked>
+                <label for="email_notif">Receive Email Notifications</label>
+            </div>
+            <div style="margin-bottom: 25px; display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" id="sms_notif">
+                <label for="sms_notif">Receive SMS Alerts (Premium)</label>
+            </div>
+            
+            <button type="button" onclick="alert('Settings saved successfully!'); history.back();" style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer;">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>
