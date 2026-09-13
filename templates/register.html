@@ -206,8 +206,13 @@
             }
 
             // 2. Password validation 
-            if (password.length < 6) {
-                alert("Password must be at least 6 characters long for security.");
+            let strength = 0;
+            if (password.length >= 8) strength += 1;
+            if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) strength += 1;
+            if (password.match(/([0-9])/) && password.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1;
+
+            if (strength < 2) {
+                alert("Your password is too weak! Please use at least a Medium strength password (minimum 8 characters and mixed case letters).");
                 event.preventDefault();
                 return;
             }
