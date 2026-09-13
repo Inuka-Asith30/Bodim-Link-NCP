@@ -93,9 +93,17 @@
                 <!-- Owner Specific Fields -->
                 <div id="owner-fields" class="hidden">
                     <label>Upload Electricity Bill (Verification)</label>
-                    <div class="auth-input-group" style="margin-bottom: 25px;">
+                    <div class="auth-input-group" style="margin-bottom: 10px;">
                         <i class="fa-solid fa-file-invoice"></i>
                         <input type="file" id="electricity_bill" name="electricity_bill" accept="image/*,.pdf" style="padding-left: 45px; padding-top: 9px;">
+                    </div>
+                    <!-- Bill Preview -->
+                    <div id="bill-preview-container" style="display: none; margin-bottom: 25px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); height: 120px; text-align: center; background: #f8fafc; position: relative;">
+                        <img id="bill-image-preview" src="#" alt="Bill Preview" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+                        <div id="bill-pdf-preview" style="display: none; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--primary);">
+                            <i class="fa-solid fa-file-pdf" style="font-size: 24px;"></i>
+                            <span style="font-size: 12px; margin-top: 5px; font-weight: 500;">PDF Document Selected</span>
+                        </div>
                     </div>
                 </div>
 
@@ -231,6 +239,45 @@
                 return;
             }
         });
+
+        // 4. File Preview Logic
+        const billInput = document.getElementById('electricity_bill');
+        const previewContainer = document.getElementById('bill-preview-container');
+        const imagePreview = document.getElementById('bill-image-preview');
+        const pdfPreview = document.getElementById('bill-pdf-preview');
+
+        if (billInput) {
+            billInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    // Check size max 5MB
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert("File is too large. Max size is 5MB.");
+                        billInput.value = '';
+                        previewContainer.style.display = 'none';
+                        return;
+                    }
+                    
+                    previewContainer.style.display = 'block';
+                    if (file.type.startsWith('image/')) {
+                        pdfPreview.style.display = 'none';
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            imagePreview.src = e.target.result;
+                            imagePreview.style.display = 'block';
+                        }
+                        reader.readAsDataURL(file);
+                    } else if (file.type === 'application/pdf') {
+                        imagePreview.style.display = 'none';
+                        pdfPreview.style.display = 'flex';
+                    } else {
+                        previewContainer.style.display = 'none';
+                    }
+                } else {
+                    previewContainer.style.display = 'none';
+                }
+            });
+        }
     });
 
     function toggleOwnerFields() {
