@@ -100,10 +100,19 @@
                 </div>
 
                 <label>Password</label>
-                <div class="auth-input-group" style="position: relative;">
+                <div class="auth-input-group" style="position: relative; margin-bottom: 5px;">
                     <i class="fa-solid fa-lock"></i>
                     <input type="password" name="password" id="reg-password" placeholder="••••••••" required>
                     <i class="fa-solid fa-eye-slash" id="toggle-pw" style="position: absolute; right: 15px; left: auto; cursor: pointer; color: #94a3b8;" onclick="togglePassword('reg-password', 'toggle-pw')"></i>
+                </div>
+                <!-- Password Strength Meter -->
+                <div id="password-strength-container" style="display: none; margin-bottom: 15px;">
+                    <div style="display: flex; gap: 5px; height: 4px; margin-bottom: 5px;">
+                        <div id="strength-bar-1" style="flex: 1; background-color: #e2e8f0; border-radius: 2px;"></div>
+                        <div id="strength-bar-2" style="flex: 1; background-color: #e2e8f0; border-radius: 2px;"></div>
+                        <div id="strength-bar-3" style="flex: 1; background-color: #e2e8f0; border-radius: 2px;"></div>
+                    </div>
+                    <div id="strength-text" style="font-size: 11px; font-weight: 500; color: #64748b; text-align: right;">Weak</div>
                 </div>
 
                 <label>Confirm Password</label>
@@ -125,6 +134,54 @@
     <!-- JavaScript to toggle owner fields -->
         <script>
     document.addEventListener("DOMContentLoaded", function() {
+        // Password Strength Checker Logic
+        const passwordInput = document.getElementById('reg-password');
+        const strengthContainer = document.getElementById('password-strength-container');
+        const bar1 = document.getElementById('strength-bar-1');
+        const bar2 = document.getElementById('strength-bar-2');
+        const bar3 = document.getElementById('strength-bar-3');
+        const strengthText = document.getElementById('strength-text');
+
+        passwordInput.addEventListener('input', function() {
+            const val = passwordInput.value;
+            if (val.length > 0) {
+                strengthContainer.style.display = 'block';
+            } else {
+                strengthContainer.style.display = 'none';
+                return;
+            }
+
+            let strength = 0;
+            // Check length
+            if (val.length >= 8) strength += 1;
+            // Check for mixed case
+            if (val.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) strength += 1;
+            // Check for numbers and special characters
+            if (val.match(/([0-9])/) && val.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1;
+            
+            // Reset colors
+            bar1.style.backgroundColor = '#e2e8f0';
+            bar2.style.backgroundColor = '#e2e8f0';
+            bar3.style.backgroundColor = '#e2e8f0';
+
+            if (strength === 0 || strength === 1) {
+                bar1.style.backgroundColor = '#ef4444'; // Red
+                strengthText.textContent = 'Weak';
+                strengthText.style.color = '#ef4444';
+            } else if (strength === 2) {
+                bar1.style.backgroundColor = '#f59e0b'; // Yellow
+                bar2.style.backgroundColor = '#f59e0b';
+                strengthText.textContent = 'Medium';
+                strengthText.style.color = '#f59e0b';
+            } else if (strength === 3) {
+                bar1.style.backgroundColor = '#10b981'; // Green
+                bar2.style.backgroundColor = '#10b981';
+                bar3.style.backgroundColor = '#10b981';
+                strengthText.textContent = 'Strong';
+                strengthText.style.color = '#10b981';
+            }
+        });
+
         const form = document.querySelector(".auth-form");
         
         form.addEventListener("submit", function(event) {
