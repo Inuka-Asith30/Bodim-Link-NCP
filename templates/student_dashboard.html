@@ -34,7 +34,7 @@
         <!-- Smart Search Filters -->
         <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border);">
             <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fa-solid fa-filter"></i> Smart Search</h3>
-            <form action="/search" method="GET" style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
+            <form id="search-form" action="/search" method="GET" style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
                 <div style="flex: 1; min-width: 200px;">
                     <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Location (City)</label>
                     <div style="position: relative;">
@@ -74,7 +74,7 @@
                 {% endif %}
             </form>
         </div>
-        <div class="card-grid">
+        <div id="boardings-grid" class="card-grid">
             {% for boarding in boardings %}
             <div class="boarding-card">
                 <img src="{{ url_for('static', filename=boarding.image_path) if boarding.image_path else 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' }}" alt="Room" class="card-img">
@@ -99,5 +99,52 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchForm = document.getElementById("search-form");
+        const boardingsGrid = document.getElementById("boardings-grid");
+
+        if (searchForm && boardingsGrid) {
+            searchForm.addEventListener("submit", function(event) {
+                event.preventDefault(); // Prevent full page reload
+
+                // Provide a slight visual cue that it's loading
+                boardingsGrid.style.opacity = '0.5';
+                boardingsGrid.style.transition = 'opacity 0.3s ease';
+
+                // Get form data
+                const formData = new FormData(searchForm);
+                const params = new URLSearchParams(formData).toString();
+                const url = `/search?${params}`;
+
+                // Fetch new results
+                fetch(url)
+                    .then(response => response.text())
+                    .then(html => {
+                        // Parse the returned HTML
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, "text/html");
+                        
+                        // Extract only the grid items and update the current DOM
+                        const newGrid = doc.getElementById('boardings-grid');
+                        if (newGrid) {
+                            boardingsGrid.innerHTML = newGrid.innerHTML;
+                        }
+
+                        // Restore opacity
+                        boardingsGrid.style.opacity = '1';
+
+                        // Update the browser URL without reloading
+                        window.history.pushState({}, '', url);
+                    })
+                    .catch(error => {
+                        console.error("Search fetch error:", error);
+                        boardingsGrid.style.opacity = '1';
+                    });
+            });
+        }
+    });
+</script>
 </body>
 </html>
