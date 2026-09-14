@@ -254,7 +254,76 @@ def owner_dashboard():
 def admin_dashboard():
     if 'user_id' not in session or session.get('user_role') != 'admin':
         return redirect(url_for('login'))
-    return render_template('admin_dashboard.html')
+        
+    connection = get_db_connection()
+    pending_owners = []
+    
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                sql = """
+                    SELECT ov.*, u.name, u.email, u.phone 
+                    FROM owner_verifications ov
+                    JOIN users u ON ov.owner_id = u.id
+                    WHERE ov.status = 'pending'
+                    ORDER BY ov.submitted_at DESC
+                """
+                cursor.execute(sql)
+                pending_owners = cursor.fetchall()
+        except Exception as e:
+            print(f"Database error in admin dashboard: {e}")
+        finally:
+            connection.close()
+            
+    return render_template('admin_dashboard.html', pending_owners=pending_owners)
+
+@app.route('/admin/approve_owner/<int:id>')
+def approve_owner(id):
+    if 'user_id' not in session or session.get('user_role') != 'admin':
+        return redirect(url_for('login'))
+        
+    connection = get_db_connection()
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT owner_id FROM owner_verifications WHERE id = %s", (id,))
+                verification = cursor.fetchone()
+                
+                if verification:
+                    owner_id = verification['owner_id']
+                    cursor.execute("UPDATE owner_verifications SET status = 'approved' WHERE id = %s", (id,))
+                    cursor.execute("UPDATE users SET status = 'verified' WHERE id = %s", (owner_id,))
+                    connection.commit()
+                    flash('Owner verified successfully!', 'success')
+        except Exception as e:
+            connection.rollback()
+            print(f"Error approving owner: {e}")
+            flash('Error verifying owner.', 'danger')
+        finally:
+            connection.close()
+            
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/reject_owner/<int:id>')
+def reject_owner(id):
+    if 'user_id' not in session or session.get('user_role') != 'admin':
+        return redirect(url_for('login'))
+        
+    connection = get_db_connection()
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("UPDATE owner_verifications SET status = 'rejected' WHERE id = %s", (id,))
+                connection.commit()
+                flash('Owner verification rejected.', 'info')
+        except Exception as e:
+            connection.rollback()
+            print(f"Error rejecting owner: {e}")
+            flash('Error rejecting owner.', 'danger')
+        finally:
+            connection.close()
+            
+    return redirect(url_for('admin_dashboard'))
 
 @app.route('/my_listings')
 def my_listings():

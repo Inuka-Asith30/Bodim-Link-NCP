@@ -36,6 +36,18 @@
 
         <h2 style="color: #1e293b; font-size: 20px; margin-bottom: 20px;">Pending Owner Verifications</h2>
         
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+                <div style="padding: 10px; margin-bottom: 20px; border-radius: 8px; font-size: 14px; 
+                {% if category == 'success' %}background: #dcfce7; color: #166534; border: 1px solid #bbf7d0;
+                {% else %}background: #fee2e2; color: #991b1b; border: 1px solid #fecaca;{% endif %}">
+                {{ message }}
+                </div>
+            {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <table class="admin-table">
             <thead>
                 <tr>
@@ -47,44 +59,31 @@
                 </tr>
             </thead>
             <tbody>
+                {% for owner in pending_owners %}
                 <tr>
                     <td>
-                        <div style="font-weight: 500; color: #1e293b;">Saman Kumara</div>
-                        <div style="font-size: 13px; color: #64748b;">0712345678</div>
+                        <div style="font-weight: 500; color: #1e293b;">{{ owner.name }}</div>
+                        <div style="font-size: 13px; color: #64748b;">{{ owner.phone }}</div>
                     </td>
-                    <td>saman@gmail.com</td>
-                    <td>2026-09-01</td>
+                    <td>{{ owner.email }}</td>
+                    <td>{{ owner.submitted_at.strftime('%Y-%m-%d') if owner.submitted_at else 'Unknown' }}</td>
                     <td>
-                        <a href="#" style="color: #3b82f6; text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 5px;">
+                        <a href="{{ url_for('static', filename=owner.bill_image_path) }}" target="_blank" style="color: #3b82f6; text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 5px;">
                             <i class="fa-solid fa-file-invoice"></i> View Bill
                         </a>
                     </td>
                     <td>
-                        <div class="action-btns">
-                            <button class="btn-approve"><i class="fa-solid fa-check"></i> Approve</button>
-                            <button class="btn-reject"><i class="fa-solid fa-xmark"></i> Reject</button>
+                        <div class="action-btns" style="display: flex; gap: 10px;">
+                            <a href="/admin/approve_owner/{{ owner.id }}" class="btn-approve" style="text-decoration: none; padding: 6px 12px; background: #10b981; color: white; border-radius: 6px; font-size: 13px;"><i class="fa-solid fa-check"></i> Approve</a>
+                            <a href="/admin/reject_owner/{{ owner.id }}" class="btn-reject" style="text-decoration: none; padding: 6px 12px; background: #ef4444; color: white; border-radius: 6px; font-size: 13px;"><i class="fa-solid fa-xmark"></i> Reject</a>
                         </div>
                     </td>
                 </tr>
+                {% else %}
                 <tr>
-                    <td>
-                        <div style="font-weight: 500; color: #1e293b;">Kamal Perera</div>
-                        <div style="font-size: 13px; color: #64748b;">0777112233</div>
-                    </td>
-                    <td>kamalp@yahoo.com</td>
-                    <td>2026-08-31</td>
-                    <td>
-                        <a href="#" style="color: #3b82f6; text-decoration: none; font-weight: 500; display: flex; align-items: center; gap: 5px;">
-                            <i class="fa-solid fa-file-invoice"></i> View Bill
-                        </a>
-                    </td>
-                    <td>
-                        <div class="action-btns">
-                            <button class="btn-approve"><i class="fa-solid fa-check"></i> Approve</button>
-                            <button class="btn-reject"><i class="fa-solid fa-xmark"></i> Reject</button>
-                        </div>
-                    </td>
+                    <td colspan="5" style="text-align: center; padding: 30px; color: #64748b;">No pending verifications at the moment.</td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
