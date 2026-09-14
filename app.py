@@ -493,7 +493,7 @@ def search_boardings():
         query += " AND location LIKE %s"
         params.append(f"%{location}%")
     if max_price and max_price.strip():
-        query += " AND rent <= %s"
+        query += " AND monthly_rent <= %s"
         params.append(float(max_price))
     if gender and gender != 'any':
         query += " AND gender_preference = %s"
@@ -582,8 +582,8 @@ def request_visit():
 # ----------------------------------------------------
 # Forgot Password & OTP Logic (Theneth)
 # ----------------------------------------------------
-MAIL_USERNAME = "email_email@gmail.com"
-MAIL_PASSWORD = "app_password"
+MAIL_USERNAME = "vkavindi4@gmail.com"
+MAIL_PASSWORD = "atgkmdldazcqubkx"
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
