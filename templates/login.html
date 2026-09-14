@@ -85,34 +85,23 @@
     </div>
 
 
-    <script>
-    const togglePassword = document.getElementById('togglePassword');
-    const password = document.getElementById('password');
 
-    togglePassword.addEventListener('click', function (e) {
-        // Toggle the input type between password and text
-        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-        password.setAttribute('type', type);
-        
-        // Toggle the icon between a crossed-out eye and a normal eye
-        this.classList.toggle('fa-eye');
-        this.classList.toggle('fa-eye-slash');
-    });
-</script>
+
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye-slash", "fa-solid");
+                icon.classList.add("fa-eye", "fa-regular");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye", "fa-regular");
+                icon.classList.add("fa-eye-slash", "fa-solid");
+            }
+        }
+    </script>
 </body>
 </html>
-<script>
-    function togglePassword(inputId, iconId) {
-        const input = document.getElementById(inputId);
-        const icon = document.getElementById(iconId);
-        if (input.type === "password") {
-            input.type = "text";
-            icon.classList.remove("fa-eye-slash", "fa-solid");
-            icon.classList.add("fa-eye", "fa-regular");
-        } else {
-            input.type = "password";
-            icon.classList.remove("fa-eye", "fa-regular");
-            icon.classList.add("fa-eye-slash", "fa-solid");
-        }
-    }
-</script>
+
