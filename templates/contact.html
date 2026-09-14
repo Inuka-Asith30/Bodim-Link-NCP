@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="background: #f8fafc;">
+    <nav class="top-nav" style="background: white;">
+        <div class="nav-logo" style="cursor:pointer;" onclick="window.location.href='/'">
+            <i class="fa-solid fa-house-chimney" style="color: var(--primary); font-size: 24px;"></i>
+            <div class="logo-text">
+                <h2>Bodim - Link NCP</h2>
+                <p>Student Accommodation & Boarding</p>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/student">For Students</a></li>
+            <li><a href="/owner">For Owners</a></li>
+            <li><a href="/student">Boardings</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/contact" class="active">Contact Us</a></li>
+        </ul>
+    </nav>
+    <div style="max-width: 600px; margin: 80px auto; padding: 40px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center;">
+        <h1 style="color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-envelope"></i> Contact Support</h1>
+        <p style="color: #475569; margin-bottom: 30px;">Have a question or need help? Reach out to our team.</p>
+        
+        <form style="display: flex; flex-direction: column; gap: 15px; text-align: left;" onsubmit="event.preventDefault(); alert('Thank you! Your message has been sent to our support team.'); window.location.href='/';">
+            <div>
+                <label style="font-weight: 600; font-size: 14px; margin-bottom: 5px; display: block;">Your Name</label>
+                <input type="text" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div>
+                <label style="font-weight: 600; font-size: 14px; margin-bottom: 5px; display: block;">Email Address</label>
+                <input type="email" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div>
+                <label style="font-weight: 600; font-size: 14px; margin-bottom: 5px; display: block;">Message</label>
+                <textarea required rows="4" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;"></textarea>
+            </div>
+            <button type="submit" class="btn-solid" style="padding: 12px; margin-top: 10px; font-size: 16px;">Send Message</button>
+        </form>
+    </div>
+</body>
+</html>

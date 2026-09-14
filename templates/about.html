@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="background: #f8fafc;">
+    <nav class="top-nav" style="background: white;">
+        <div class="nav-logo" style="cursor:pointer;" onclick="window.location.href='/'">
+            <i class="fa-solid fa-house-chimney" style="color: var(--primary); font-size: 24px;"></i>
+            <div class="logo-text">
+                <h2>Bodim - Link NCP</h2>
+                <p>Student Accommodation & Boarding</p>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/student">For Students</a></li>
+            <li><a href="/owner">For Owners</a></li>
+            <li><a href="/student">Boardings</a></li>
+            <li><a href="/about" class="active">About Us</a></li>
+            <li><a href="/contact">Contact Us</a></li>
+        </ul>
+    </nav>
+    <div style="max-width: 800px; margin: 80px auto; padding: 40px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center;">
+        <h1 style="color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-circle-info"></i> About Bodim-Link NCP</h1>
+        <p style="color: #475569; line-height: 1.8; font-size: 16px;">
+            Bodim-Link NCP is a centralized matchmaking platform designed specifically for university students in the Rajarata University area (Mihintale & Anuradhapura). 
+            Our mission is to provide a safe, reliable, and hassle-free way for students to find verified boarding places, and for property owners to easily manage their listings.
+        </p>
+        <div style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
+            <a href="/student" class="btn-solid" style="text-decoration: none; padding: 12px 25px;">Find a Boarding</a>
+        </div>
+    </div>
+</body>
+</html>
