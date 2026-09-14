@@ -172,6 +172,14 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
+        # Hardcoded Admin Login
+        if email == 'admin@gmail.com' and password == 'admin':
+            session['user_id'] = 0
+            session['user_name'] = 'Admin'
+            session['user_role'] = 'admin'
+            flash('Admin logged in successfully.', 'success')
+            return redirect(url_for('admin_dashboard'))
+
         connection = get_db_connection()
         if not connection:
             flash('Database connection failed. Please try again later.', 'danger')
