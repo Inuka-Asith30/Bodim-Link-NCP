@@ -77,16 +77,20 @@
         <div id="boardings-grid" class="card-grid">
             {% for boarding in boardings %}
             <div class="boarding-card">
-                <img src="{{ url_for('static', filename=boarding.image_path) if boarding.image_path else 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' }}" alt="Room" class="card-img">
+                <a href="/boarding/{{ boarding.id }}" style="text-decoration: none; color: inherit; display: block;">
+                    <img src="{{ url_for('static', filename=boarding.image_path) if boarding.image_path else 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' }}" alt="Room" class="card-img">
+                </a>
                 <div class="card-content">
                     <span class="badge {{ 'boys' if boarding.gender_preference == 'boys' else 'girls' }}">
                         {{ boarding.gender_preference | capitalize }} Only
                     </span>
-                    <h3 class="card-title">{{ boarding.location }} Boarding</h3>
+                    <a href="/boarding/{{ boarding.id }}" style="text-decoration: none; color: inherit;">
+                        <h3 class="card-title">{{ boarding.name if boarding.name else boarding.location + ' Boarding' }}</h3>
+                    </a>
                     <div class="card-details">
                         <span><i class="fa-solid fa-location-dot"></i> {{ boarding.location }}</span>
-                        <span><i class="fa-solid fa-money-bill-wave"></i> Rs. {{ boarding.rent }} / month</span>
-                        <span><i class="fa-solid fa-check"></i> {{ boarding.amenities }}</span>
+                        <span><i class="fa-solid fa-money-bill-wave"></i> Rs. {{ boarding.monthly_rent if boarding.monthly_rent else boarding.rent }} / month</span>
+                        <span><i class="fa-solid fa-check"></i> {{ boarding.boarding_type if boarding.boarding_type else boarding.amenities }}</span>
                     </div>
                     <a href="/boarding/{{ boarding.id }}" class="btn-action">Request Visit</a>
                 </div>
