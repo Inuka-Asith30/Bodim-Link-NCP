@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users - Bodim-Link NCP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=6) }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="display: flex; min-height: 100vh; background-color: #f8fafc; margin: 0;">
+    <!-- Sidebar -->
+    <div style="width: 250px; background: var(--primary); color: white; display: flex; flex-direction: column; padding: 20px 0;">
+        <h2 style="text-align: center; margin-bottom: 30px; font-size: 20px;"><i class="fa-solid fa-house-user"></i> Bodim-Link</h2>
+        <ul class="nav-links" style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+            <li style="padding: 0 20px;"><a href="/admin" style="color: rgba(255,255,255,0.7); text-decoration: none; padding: 10px; display: block; border-radius: 8px;"><i class="fa-solid fa-shield-halved"></i> Verifications</a></li>
+            <li style="padding: 0 20px;"><a href="/admin/users" class="active" style="color: var(--primary); background: white; text-decoration: none; padding: 10px; display: block; border-radius: 8px; font-weight: 600;"><i class="fa-solid fa-users-gear"></i> Manage Users</a></li>
+            <li style="padding: 0 20px;"><a href="/admin/statistics" style="color: rgba(255,255,255,0.7); text-decoration: none; padding: 10px; display: block; border-radius: 8px;"><i class="fa-solid fa-chart-line"></i> Statistics</a></li>
+        </ul>
+        <div style="margin-top: auto; padding: 20px;"><a href="/logout" style="display: block; background: rgba(255, 255, 255, 0.1); color: white; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 500; border: 1px solid rgba(255, 255, 255, 0.2);"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></div>
+    </div>
+
+    <!-- Main Content -->
+    <div style="flex: 1; padding: 40px; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <div>
+                <h1 style="color: var(--text-dark); margin-bottom: 5px;">Manage Users</h1>
+                <p style="color: var(--text-light); font-size: 14px;">View and manage all registered platform users</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="width: 40px; height: 40px; background: #ef4444; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600;">SA</div>
+                <span style="font-weight: 600; font-size: 14px;">Administrator</span>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); overflow: hidden; border: 1px solid var(--border);">
+            <div style="padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
+                <h3 style="color: var(--text-dark); font-size: 16px;">Active Users Database</h3>
+                <input type="text" placeholder="Search users..." style="padding: 8px 15px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; width: 250px;">
+            </div>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f1f5f9; text-align: left;">
+                    <tr>
+                        <th style="padding: 15px 20px; font-size: 12px; color: var(--text-light); text-transform: uppercase;">Name</th>
+                        <th style="padding: 15px 20px; font-size: 12px; color: var(--text-light); text-transform: uppercase;">Email</th>
+                        <th style="padding: 15px 20px; font-size: 12px; color: var(--text-light); text-transform: uppercase;">Role</th>
+                        <th style="padding: 15px 20px; font-size: 12px; color: var(--text-light); text-transform: uppercase;">Status</th>
+                        <th style="padding: 15px 20px; font-size: 12px; color: var(--text-light); text-transform: uppercase;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 15px 20px; font-size: 14px; font-weight: 500;">Venuri Kavindi</td>
+                        <td style="padding: 15px 20px; font-size: 14px; color: var(--text-light);">vkavindi4@gmail.com</td>
+                        <td style="padding: 15px 20px;"><span style="background: #dbeafe; color: #2563eb; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">Student</span></td>
+                        <td style="padding: 15px 20px;"><span style="color: #10b981; font-size: 13px;"><i class="fa-solid fa-circle" style="font-size: 8px; margin-right: 5px;"></i> Active</span></td>
+                        <td style="padding: 15px 20px;"><button class="btn-outline" style="padding: 5px 10px; font-size: 12px; border-color: #ef4444; color: #ef4444;" onclick="alert('Demo: Cannot suspend main accounts')">Suspend</button></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 15px 20px; font-size: 14px; font-weight: 500;">Kamal Perera</td>
+                        <td style="padding: 15px 20px; font-size: 14px; color: var(--text-light);">kamal.owner@example.com</td>
+                        <td style="padding: 15px 20px;"><span style="background: #fef3c7; color: #d97706; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">Owner</span></td>
+                        <td style="padding: 15px 20px;"><span style="color: #10b981; font-size: 13px;"><i class="fa-solid fa-circle" style="font-size: 8px; margin-right: 5px;"></i> Verified</span></td>
+                        <td style="padding: 15px 20px;"><button class="btn-outline" style="padding: 5px 10px; font-size: 12px; border-color: #ef4444; color: #ef4444;" onclick="alert('Demo: Cannot suspend main accounts')">Suspend</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -314,6 +314,19 @@ def admin_dashboard():
             
     return render_template('admin_dashboard.html', pending_owners=pending_owners, pending_boardings=pending_boardings)
 
+
+@app.route('/admin/users')
+def admin_users():
+    if 'user_id' not in session or session.get('user_role') != 'admin':
+        return redirect(url_for('login'))
+    return render_template('manage_users.html')
+
+@app.route('/admin/statistics')
+def admin_statistics():
+    if 'user_id' not in session or session.get('user_role') != 'admin':
+        return redirect(url_for('login'))
+    return render_template('statistics.html')
+
 @app.route('/admin/approve_owner/<int:id>')
 def approve_owner(id):
     if 'user_id' not in session or session.get('user_role') != 'admin':
