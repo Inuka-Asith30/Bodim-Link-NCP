@@ -86,6 +86,49 @@
                 {% endfor %}
             </tbody>
         </table>
+        
+        <h2 style="color: #1e293b; font-size: 20px; margin-top: 40px; margin-bottom: 20px;">Pending Boardings</h2>
+        
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Boarding Details</th>
+                    <th>Location / Rent</th>
+                    <th>Owner Info</th>
+                    <th>Posted Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for boarding in pending_boardings %}
+                <tr>
+                    <td>
+                        <div style="font-weight: 500; color: #1e293b;">{{ boarding.name }}</div>
+                        <div style="font-size: 13px; color: #64748b;">{{ boarding.boarding_type }} - {{ boarding.gender_preference | capitalize }}</div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 500; color: #1e293b;">{{ boarding.location }}</div>
+                        <div style="font-size: 13px; color: #64748b;">Rs. {{ boarding.monthly_rent }} / mo</div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 500; color: #1e293b;">{{ boarding.owner_name }}</div>
+                        <div style="font-size: 13px; color: #64748b;">{{ boarding.owner_phone }}</div>
+                    </td>
+                    <td>{{ boarding.created_at.strftime('%Y-%m-%d') if boarding.created_at else 'Unknown' }}</td>
+                    <td>
+                        <div class="action-btns" style="display: flex; gap: 10px;">
+                            <a href="/admin/approve_boarding/{{ boarding.id }}" class="btn-approve" style="text-decoration: none; padding: 6px 12px; background: #10b981; color: white; border-radius: 6px; font-size: 13px;"><i class="fa-solid fa-check"></i> Approve</a>
+                            <a href="/admin/reject_boarding/{{ boarding.id }}" class="btn-reject" style="text-decoration: none; padding: 6px 12px; background: #ef4444; color: white; border-radius: 6px; font-size: 13px;"><i class="fa-solid fa-xmark"></i> Reject</a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 30px; color: #64748b;">No pending boardings at the moment.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 

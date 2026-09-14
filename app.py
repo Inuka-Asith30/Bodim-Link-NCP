@@ -241,8 +241,15 @@ def student_dashboard():
     if connection:
         try:
             with connection.cursor() as cursor:
+                try:
+                    cursor.execute("ALTER TABLE boardings ADD COLUMN approval_status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending'")
+                    # Set existing boardings to approved so they don't disappear
+                    cursor.execute("UPDATE boardings SET approval_status = 'approved'")
+                    connection.commit()
+                except:
+                    pass
                 
-                cursor.execute("SELECT * FROM boardings WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) ORDER BY id DESC")
+                cursor.execute("SELECT * FROM boardings WHERE approval_status = 'approved' AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) ORDER BY id DESC")
             
                 boardings = cursor.fetchall()
         except Exception as e:
@@ -265,25 +272,47 @@ def admin_dashboard():
         
     connection = get_db_connection()
     pending_owners = []
+    pending_boardings = []
     
     if connection:
         try:
             with connection.cursor() as cursor:
-                sql = """
+                # 1. Fetch pending owner verifications
+                sql_owners = """
                     SELECT ov.*, u.name, u.email, u.phone 
                     FROM owner_verifications ov
                     JOIN users u ON ov.owner_id = u.id
                     WHERE ov.status = 'pending'
                     ORDER BY ov.submitted_at DESC
                 """
-                cursor.execute(sql)
+                cursor.execute(sql_owners)
                 pending_owners = cursor.fetchall()
+                
+                # 2. Add approval_status column if missing
+                try:
+                    cursor.execute("ALTER TABLE boardings ADD COLUMN approval_status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending'")
+                    cursor.execute("UPDATE boardings SET approval_status = 'approved'")
+                    connection.commit()
+                except:
+                    pass
+
+                # 3. Fetch pending boardings
+                sql_boardings = """
+                    SELECT b.*, u.name AS owner_name, u.phone AS owner_phone
+                    FROM boardings b
+                    JOIN users u ON b.owner_id = u.id
+                    WHERE b.approval_status = 'pending'
+                    ORDER BY b.created_at DESC
+                """
+                cursor.execute(sql_boardings)
+                pending_boardings = cursor.fetchall()
+                
         except Exception as e:
             print(f"Database error in admin dashboard: {e}")
         finally:
             connection.close()
             
-    return render_template('admin_dashboard.html', pending_owners=pending_owners)
+    return render_template('admin_dashboard.html', pending_owners=pending_owners, pending_boardings=pending_boardings)
 
 @app.route('/admin/approve_owner/<int:id>')
 def approve_owner(id):
@@ -328,6 +357,48 @@ def reject_owner(id):
             connection.rollback()
             print(f"Error rejecting owner: {e}")
             flash('Error rejecting owner.', 'danger')
+        finally:
+            connection.close()
+            
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/approve_boarding/<int:id>')
+def approve_boarding(id):
+    if 'user_id' not in session or session.get('user_role') != 'admin':
+        return redirect(url_for('login'))
+        
+    connection = get_db_connection()
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("UPDATE boardings SET approval_status = 'approved' WHERE id = %s", (id,))
+                connection.commit()
+                flash('Boarding approved successfully!', 'success')
+        except Exception as e:
+            connection.rollback()
+            print(f"Error approving boarding: {e}")
+            flash('Error approving boarding.', 'danger')
+        finally:
+            connection.close()
+            
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/reject_boarding/<int:id>')
+def reject_boarding(id):
+    if 'user_id' not in session or session.get('user_role') != 'admin':
+        return redirect(url_for('login'))
+        
+    connection = get_db_connection()
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("UPDATE boardings SET approval_status = 'rejected' WHERE id = %s", (id,))
+                connection.commit()
+                flash('Boarding rejected.', 'info')
+        except Exception as e:
+            connection.rollback()
+            print(f"Error rejecting boarding: {e}")
+            flash('Error rejecting boarding.', 'danger')
         finally:
             connection.close()
             
@@ -573,7 +644,7 @@ def search_boardings():
     max_price = request.args.get('max_price')
     gender = request.args.get('gender')
 
-    query = "SELECT * FROM boardings WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
+    query = "SELECT * FROM boardings WHERE approval_status = 'approved' AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
     params = []
 
     if location:
