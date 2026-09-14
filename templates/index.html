@@ -42,25 +42,38 @@
         </div>
     </section>
 
-    <div class="search-box">
+        <div class="search-box">
         <div class="search-box-header">
             <i class="fa-solid fa-magnifying-glass" style="color: var(--primary);"></i> Search Boarding Places
         </div>
-        <div class="search-fields-row">
+        <form action="/search" method="GET" class="search-fields-row" style="margin:0; padding:0;">
             <div class="search-field">
                 <label><i class="fa-solid fa-users" style="color: #7c3aed;"></i> Gender Preference</label>
-                <select><option>Any</option><option>Boys Only</option><option>Girls Only</option></select>
+                <select name="gender">
+                    <option value="any">Any</option>
+                    <option value="male">Boys Only</option>
+                    <option value="female">Girls Only</option>
+                </select>
             </div>
             <div class="search-field">
                 <label><i class="fa-solid fa-location-dot" style="color: #7c3aed;"></i> Location</label>
-                <select><option>Any Location</option><option>Anuradhapura</option><option>Mihinthale</option></select>
+                <select name="location">
+                    <option value="">Any Location</option>
+                    <option value="Anuradhapura">Anuradhapura</option>
+                    <option value="Mihinthale">Mihinthale</option>
+                </select>
             </div>
             <div class="search-field">
                 <label><i class="fa-solid fa-tag" style="color: #7c3aed;"></i> Max Monthly Rent</label>
-                <select><option>Any Budget</option><option>Under Rs. 5000</option><option>Under Rs. 10000</option></select>
+                <select name="max_price">
+                    <option value="">Any Budget</option>
+                    <option value="15000">Under Rs. 15000</option>
+                    <option value="10000">Under Rs. 10000</option>
+                    <option value="5000">Under Rs. 5000</option>
+                </select>
             </div>
-            <button class="btn-search"><i class="fa-solid fa-magnifying-glass"></i> Search Now</button>
-        </div>
+            <button type="submit" class="btn-search" style="padding: 12px 25px; border: none; background: var(--primary); color: white; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600;"><i class="fa-solid fa-magnifying-glass"></i> Search Now</button>
+        </form>
     </div>
 
     <div class="features-grid">
