@@ -46,7 +46,7 @@
                     <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Max Budget (Rs)</label>
                     <div style="position: relative;">
                         <i class="fa-solid fa-coins" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary);"></i>
-                        <input type="number" name="max_price" placeholder="e.g. 15000" value="{{ request.args.get('max_price', '') }}" style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid var(--border); border-radius: 8px;">
+                        <input type="number" step="500"  name="max_price" placeholder="e.g. 15000" value="{{ request.args.get('max_price', '') }}" style="width: 100%; padding: 12px 12px 12px 40px; border: 1px solid var(--border); border-radius: 8px;">
                     </div>
                 </div>
                 <div style="flex: 1; min-width: 150px;">
