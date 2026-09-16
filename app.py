@@ -48,6 +48,11 @@ def register():
         role = request.form.get('role')
         password = request.form.get('password')
         
+        # Validate student email domain
+        if role == 'student' and not email.endswith('@tec.rjt.ac.lk'):
+            flash('Students must register with a valid @tec.rjt.ac.lk university email.', 'danger')
+            return render_template('register.html')
+        
         connection = get_db_connection()
         if not connection:
             flash('Database connection failed. Please try again later.', 'danger')
@@ -286,12 +291,7 @@ def admin_dashboard():
                 pending_owners = cursor.fetchall()
                 
                 # 2. Add approval_status column if missing
-                try:
-                    cursor.execute("ALTER TABLE boardings ADD COLUMN approval_status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending'")
-                    cursor.execute("UPDATE boardings SET approval_status = 'approved'")
-                    connection.commit()
-                except:
-                    pass
+                # (Removed ALTER TABLE as it causes DB locks)
 
                 # 3. Fetch pending boardings
                 sql_boardings = """
