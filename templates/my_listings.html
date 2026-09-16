@@ -251,7 +251,7 @@
                             <td>
                                 <div class="boarding-meta">
                                     {% if boarding.image_path %}
-                                        <img src="{{ url_for('static', filename=boarding.image_path.replace('uploads/', 'uploads/')) }}" class="boarding-thumb" alt="{{ boarding.name }}">
+                                        <img src="{{ boarding.image_path if 'http' in boarding.image_path else url_for('static', filename=boarding.image_path) }}" class="boarding-thumb" alt="{{ boarding.name }}" onerror="this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500&q=80'">
                                     {% else %}
                                         <div class="boarding-thumb" style="display:flex; align-items:center; justify-content:center; background:#eee; color:#999;"><i class="fa-solid fa-house"></i></div>
                                     {% endif %}
