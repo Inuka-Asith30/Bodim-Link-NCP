@@ -6,44 +6,422 @@
     <title>Contact Us - Bodim-Link NCP</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .contact-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #4c1d95 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+        }
+        .contact-hero h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            animation: fadeInDown 0.8s ease;
+        }
+        .contact-hero p {
+            font-size: 16px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInDown 1s ease;
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .contact-wrapper {
+            max-width: 1200px;
+            margin: -40px auto 80px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Info Cards */
+        .info-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .info-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .info-card:hover {
+            transform: translateX(10px);
+            border-left-color: var(--primary);
+            box-shadow: 0 15px 35px rgba(124, 58, 237, 0.1);
+        }
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .info-card:hover .icon-circle {
+            background: var(--primary);
+            color: white;
+        }
+        .info-details h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+        .info-details p {
+            color: var(--text-light);
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        /* Form Area */
+        .form-container {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+        .form-container h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+        }
+
+        /* Floating Label Inputs */
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: transparent;
+            font-size: 15px;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .input-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .input-group label {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            padding: 0 5px;
+            color: var(--text-light);
+            font-size: 15px;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .input-group textarea ~ label {
+            top: 20px;
+            transform: none;
+        }
+        .input-group input:focus, .input-group textarea:focus,
+        .input-group input:not(:placeholder-shown), .input-group textarea:not(:placeholder-shown) {
+            border-color: var(--primary);
+        }
+        .input-group input:focus ~ label, .input-group textarea:focus ~ label,
+        .input-group input:not(:placeholder-shown) ~ label, .input-group textarea:not(:placeholder-shown) ~ label {
+            top: -10px;
+            font-size: 13px;
+            color: var(--primary);
+            transform: none;
+        }
+        
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-submit:hover {
+            background: #6d28d9;
+            box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .alert-box {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+        .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; display: block; }
+        .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; display: block; }
+
+        @media(max-width: 768px) {
+            .contact-wrapper { grid-template-columns: 1fr; margin-top: 20px; }
+            .form-container { padding: 30px; }
+        }
+        /* FAQ Section */
+        .faq-section {
+            max-width: 800px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+        }
+        .faq-section h2 {
+            text-align: center;
+            font-size: 32px;
+            color: var(--text-dark);
+            margin-bottom: 40px;
+        }
+        .faq-item {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .faq-item:hover {
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.08);
+            border-color: #d8b4fe;
+        }
+        .faq-question {
+            padding: 20px 25px;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+        .faq-question:hover {
+            color: var(--primary);
+        }
+        .faq-question i {
+            color: var(--primary);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #fafaf9;
+        }
+        .faq-answer-inner {
+            padding: 0 25px 25px;
+            color: var(--text-light);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 400px;
+        }
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+    </style>
 </head>
-<body style="background: #f8fafc;">
-    <nav class="top-nav" style="background: white;">
+<body>
+    <nav class="navbar">
         <div class="nav-logo" style="cursor:pointer;" onclick="window.location.href='/'">
-            <i class="fa-solid fa-house-chimney" style="color: var(--primary); font-size: 24px;"></i>
-            <div class="logo-text">
-                <h2>Bodim - Link NCP</h2>
-                <p>Student Accommodation & Boarding</p>
-            </div>
+            <i class="fa-solid fa-house-chimney"></i>
+            <div>Bodim - Link NCP<div style="font-size: 10px; color: #64748b; font-weight:400;">Student Accommodation & Boarding</div></div>
         </div>
-        <ul class="nav-links">
+        <ul class="nav-menu">
             <li><a href="/">Home</a></li>
             <li><a href="/student">For Students</a></li>
             <li><a href="/owner">For Owners</a></li>
-            <li><a href="/student">Boardings</a></li>
             <li><a href="/about">About Us</a></li>
             <li><a href="/contact" class="active">Contact Us</a></li>
         </ul>
+        <div class="nav-auth">
+            {% if session.get('user_id') %}
+                <a href="/logout" class="btn-outline"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+            {% else %}
+                <a href="/login" class="btn-outline">Login</a>
+                <a href="/register" class="btn-solid">Register</a>
+            {% endif %}
+        </div>
     </nav>
-    <div style="max-width: 600px; margin: 80px auto; padding: 40px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center;">
-        <h1 style="color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-envelope"></i> Contact Support</h1>
-        <p style="color: #475569; margin-bottom: 30px;">Have a question or need help? Reach out to our team.</p>
-        
-        <form style="display: flex; flex-direction: column; gap: 15px; text-align: left;" onsubmit="event.preventDefault(); alert('Thank you! Your message has been sent to our support team.'); window.location.href='/';">
-            <div>
-                <label style="font-weight: 600; font-size: 14px; margin-bottom: 5px; display: block;">Your Name</label>
-                <input type="text" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
-            </div>
-            <div>
-                <label style="font-weight: 600; font-size: 14px; margin-bottom: 5px; display: block;">Email Address</label>
-                <input type="email" required style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
-            </div>
-            <div>
-                <label style="font-weight: 600; font-size: 14px; margin-bottom: 5px; display: block;">Message</label>
-                <textarea required rows="4" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;"></textarea>
-            </div>
-            <button type="submit" class="btn-solid" style="padding: 12px; margin-top: 10px; font-size: 16px;">Send Message</button>
-        </form>
+
+    <div class="contact-hero">
+        <h1>Let's Get in Touch!</h1>
+        <p>Whether you have a question about listings, pricing, or anything else, our team is ready to answer all your questions.</p>
     </div>
+
+    <div class="contact-wrapper">
+        <!-- Contact Information -->
+        <div class="info-cards">
+            <div class="info-card">
+                <div class="icon-circle"><i class="fa-solid fa-location-dot"></i></div>
+                <div class="details">
+                    <div class="info-details">
+                        <h3>Head Office</h3>
+                        <p>123 University Road,<br>Mihinthale, Sri Lanka</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <div class="icon-circle"><i class="fa-solid fa-phone"></i></div>
+                <div class="details">
+                    <div class="info-details">
+                        <h3>Phone Support</h3>
+                        <p>+94 77 123 4567<br>+94 25 222 3333</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>
+                <div class="details">
+                    <div class="info-details">
+                        <h3>Email Us</h3>
+                        <p>support@bodimlink.lk<br>info@bodimlink.lk</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="form-container">
+            <h2>Send us a Message</h2>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert-box alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form action="/contact" method="POST" id="contactForm">
+                <div class="input-group">
+                    <input type="text" name="name" id="name" placeholder=" " required>
+                    <label for="name">Your Full Name</label>
+                </div>
+                
+                <div class="input-group">
+                    <input type="email" name="email" id="email" placeholder=" " required>
+                    <label for="email">Email Address</label>
+                </div>
+                
+                <div class="input-group">
+                    <textarea name="message" id="message" placeholder=" " required></textarea>
+                    <label for="message">How can we help you?</label>
+                </div>
+                
+                <button type="submit" class="btn-submit">
+                    Send Message <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    <!-- FAQ Section -->
+    <div class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+        
+        <div class="faq-item">
+            <button class="faq-question">
+                Is Bodim-Link NCP free for students?
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">
+                    Yes! Our platform is 100% free for students searching for accommodation. You can browse, contact owners, and book visits without any hidden charges.
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                How do I know if a boarding place is safe?
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">
+                    We mandate all property owners to provide a recent electricity or utility bill to verify their identity and property ownership before they are approved on our platform.
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                How can I list my boarding place?
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">
+                    Simply click on 'Register' and select 'I am an Owner'. Once you create an account, you can add details and pictures of your property through the Owner Dashboard.
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">
+                Can I cancel a scheduled visit?
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">
+                    Yes, you can cancel or reschedule a visit by directly contacting the owner using the phone number provided in your accepted visit request.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Interaction Script -->
+    <script>
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                
+                // Close other open FAQs
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    if (item !== faqItem) item.classList.remove('active');
+                });
+                
+                // Toggle current FAQ
+                faqItem.classList.toggle('active');
+            });
+        });
+    </script>
 </body>
 </html>

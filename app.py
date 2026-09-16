@@ -223,9 +223,6 @@ def login():
 def about():
     return render_template('about.html')
 
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
 
 
 @app.route('/student')
@@ -853,8 +850,8 @@ def reset_password():
 def about_us():
     return render_template('about_us.html')
 
-@app.route('/contact_us', methods=['GET', 'POST'])
-def contact_us():
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
     if request.method == 'POST':
         name = request.form.get('name')
         email = request.form.get('email')
@@ -876,9 +873,9 @@ def contact_us():
             print(f"Contact Us email failed: {e}")
             flash('Failed to send message. Please try again later.', 'danger')
             
-        return redirect(url_for('contact_us'))
+        return redirect(url_for('contact'))
         
-    return render_template('contact_us.html')
+    return render_template('contact.html')
 
 @app.route('/profile')
 def profile():
