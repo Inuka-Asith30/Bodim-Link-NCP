@@ -6,34 +6,319 @@
     <title>About Us - Bodim-Link NCP</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom Animations and Interactivity for About Page */
+        .about-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #4c1d95 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: pulse 10s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .hero-content h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease-out;
+        }
+        .hero-content p {
+            font-size: 18px;
+            opacity: 0.9;
+            line-height: 1.6;
+            animation: fadeInUp 1.2s ease-out;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            color: var(--text-dark);
+            margin-bottom: 50px;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        /* Mission & Vision Cards */
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        .mission-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid transparent;
+        }
+        .mission-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(124, 58, 237, 0.15);
+            border-bottom: 4px solid var(--primary);
+        }
+        .mission-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 25px;
+            transition: all 0.4s ease;
+        }
+        .mission-card:hover .mission-icon {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1) rotate(5deg);
+        }
+        .mission-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+        .mission-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: white;
+            padding: 80px 0;
+            margin: 80px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.02);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .stat-box h2 {
+            font-size: 48px;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .stat-box p {
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        /* Call to Action */
+        .cta-section {
+            background: var(--bg-light);
+            text-align: center;
+            padding: 60px 20px 100px;
+        }
+        .cta-content {
+            background: white;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+        .cta-content h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+        .cta-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        /* Responsive */
+        @media(max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-content h1 { font-size: 36px; }
+            .cta-btns { flex-direction: column; }
+        }
+    </style>
 </head>
-<body style="background: #f8fafc;">
-    <nav class="top-nav" style="background: white;">
+<body>
+    <nav class="navbar">
         <div class="nav-logo" style="cursor:pointer;" onclick="window.location.href='/'">
-            <i class="fa-solid fa-house-chimney" style="color: var(--primary); font-size: 24px;"></i>
-            <div class="logo-text">
-                <h2>Bodim - Link NCP</h2>
-                <p>Student Accommodation & Boarding</p>
-            </div>
+            <i class="fa-solid fa-house-chimney"></i>
+            <div>Bodim - Link NCP<div style="font-size: 10px; color: #64748b; font-weight:400;">Student Accommodation & Boarding</div></div>
         </div>
-        <ul class="nav-links">
+        <ul class="nav-menu">
             <li><a href="/">Home</a></li>
             <li><a href="/student">For Students</a></li>
             <li><a href="/owner">For Owners</a></li>
-            <li><a href="/student">Boardings</a></li>
             <li><a href="/about" class="active">About Us</a></li>
             <li><a href="/contact">Contact Us</a></li>
         </ul>
+        <div class="nav-auth">
+            {% if session.get('user_id') %}
+                <a href="/logout" class="btn-outline"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+            {% else %}
+                <a href="/login" class="btn-outline">Login</a>
+                <a href="/register" class="btn-solid">Register</a>
+            {% endif %}
+        </div>
     </nav>
-    <div style="max-width: 800px; margin: 80px auto; padding: 40px; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center;">
-        <h1 style="color: var(--primary); margin-bottom: 20px;"><i class="fa-solid fa-circle-info"></i> About Bodim-Link NCP</h1>
-        <p style="color: #475569; line-height: 1.8; font-size: 16px;">
-            Bodim-Link NCP is a centralized matchmaking platform designed specifically for university students in the Rajarata University area (Mihintale & Anuradhapura). 
-            Our mission is to provide a safe, reliable, and hassle-free way for students to find verified boarding places, and for property owners to easily manage their listings.
-        </p>
-        <div style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
-            <a href="/student" class="btn-solid" style="text-decoration: none; padding: 12px 25px;">Find a Boarding</a>
+
+    <!-- Hero Section -->
+    <div class="about-hero">
+        <div class="hero-content">
+            <h1>Revolutionizing Student Accommodation</h1>
+            <p>Bodim-Link NCP is the premier platform connecting university students with safe, verified, and comfortable boarding places across the North Central Province.</p>
         </div>
     </div>
+
+    <!-- Mission & Vision -->
+    <div class="section-container">
+        <h2 class="section-title">Who We Are</h2>
+        <div class="mission-grid">
+            <div class="mission-card">
+                <div class="mission-icon">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <h3>Our Mission</h3>
+                <p>To eliminate the hassle of finding student accommodation by providing a transparent, verified, and easily accessible digital platform for students in Anuradhapura & Mihinthale.</p>
+            </div>
+            
+            <div class="mission-card">
+                <div class="mission-icon">
+                    <i class="fa-regular fa-eye"></i>
+                </div>
+                <h3>Our Vision</h3>
+                <p>To become the most trusted and widespread student accommodation network in Sri Lanka, ensuring every student has a safe environment to focus on their academic journey.</p>
+            </div>
+            
+            <div class="mission-card">
+                <div class="mission-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3>Our Promise</h3>
+                <p>100% verified listings. We mandate strict verification for all boarding owners using utility bills, guaranteeing security and peace of mind for students and parents alike.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-box">
+                <h2 class="counter" data-target="500">0</h2>
+                <p>Verified Boardings</p>
+            </div>
+            <div class="stat-box">
+                <h2 class="counter" data-target="1200">0</h2>
+                <p>Happy Students</p>
+            </div>
+            <div class="stat-box">
+                <h2 class="counter" data-target="150">0</h2>
+                <p>Trusted Owners</p>
+            </div>
+            <div class="stat-box">
+                <h2 class="counter" data-target="100">0</h2>
+                <p>% Secure</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to find your perfect place?</h2>
+            <p style="color: var(--text-light); margin-bottom: 20px;">Join thousands of students and property owners making accommodation simple with Bodim-Link NCP.</p>
+            <div class="cta-btns">
+                <a href="/student" class="btn-solid" style="padding: 15px 30px; justify-content: center; font-size: 16px;">
+                    <i class="fa-solid fa-magnifying-glass"></i> Find a Boarding
+                </a>
+                <a href="/owner" class="btn-outline" style="padding: 15px 30px; justify-content: center; font-size: 16px;">
+                    <i class="fa-solid fa-plus"></i> List Your Property
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive JS for Counters -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const counters = document.querySelectorAll('.counter');
+            
+            const runCounter = () => {
+                counters.forEach(counter => {
+                    const target = +counter.getAttribute('data-target');
+                    const c = +counter.innerText.replace('+', '');
+                    const increment = target / 100;
+                    
+                    if (c < target) {
+                        counter.innerText = Math.ceil(c + increment);
+                        setTimeout(runCounter, 20);
+                    } else {
+                        counter.innerText = target + (target > 100 ? '+' : '%');
+                    }
+                });
+            };
+
+            // Intersection Observer to trigger animation when scrolled into view
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        runCounter();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            document.querySelector('.stats-section').querySelectorAll('.counter').forEach(c => {
+                observer.observe(c);
+            });
+        });
+    </script>
 </body>
 </html>
