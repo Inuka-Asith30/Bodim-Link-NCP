@@ -174,108 +174,72 @@
 
         <!-- Requests Grid -->
         <div class="requests-grid">
-
-            <!-- Request Card 1 (Approved) -->
-            <div class="request-card">
-                <div class="request-card-header">
-                    <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="request-card-img" alt="Sunethra Boarding">
-                    <div class="status-badge-floating badge-approved">
-                        <i class="fa-solid fa-circle-check"></i> Request Approved
-                    </div>
-                </div>
-                <div class="request-card-body">
-                    <h3 class="request-title">Sunethra Girls Boarding</h3>
-                    <div class="request-location"><i class="fa-solid fa-location-dot"></i> Anuradhapura (1.2km from Campus)</div>
-
-                    <div class="info-row-item">
-                        <span class="info-label">Visit Date</span>
-                        <span class="info-value">Sep 06, 2026</span>
-                    </div>
-                    <div class="info-row-item">
-                        <span class="info-label">Monthly Rent</span>
-                        <span class="info-value" style="color: #7c3aed;">LKR 15,000</span>
-                    </div>
-                    <div class="info-row-item">
-                        <span class="info-label">Owner</span>
-                        <span class="info-value">Mrs. Sunethra Perera</span>
-                    </div>
-
-                    <div class="owner-contact-box">
-                        <div>
-                            <div style="font-size: 11px; color: var(--text-light);">Owner Phone</div>
-                            <div style="font-weight: 700; font-size: 13px; color: var(--text-dark);">077 123 4567</div>
+            {% if requests_data %}
+                {% for req in requests_data %}
+                <div class="request-card">
+                    <div class="request-card-header">
+                        <img src="{{ req.image_path if 'http' in req.image_path else url_for('static', filename=req.image_path) }}" class="request-card-img" alt="{{ req.boarding_name }}" onerror="this.src='https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&q=80'">
+                        {% if req.status == 'accepted' %}
+                        <div class="status-badge-floating badge-approved">
+                            <i class="fa-solid fa-circle-check"></i> Request Approved
                         </div>
-                        <a href="tel:0771234567" class="btn-call-owner"><i class="fa-solid fa-phone"></i> Call Now</a>
+                        {% elif req.status == 'pending' %}
+                        <div class="status-badge-floating badge-pending">
+                            <i class="fa-solid fa-clock"></i> Pending Approval
+                        </div>
+                        {% else %}
+                        <div class="status-badge-floating badge-rejected">
+                            <i class="fa-solid fa-circle-xmark"></i> Request Declined
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="request-card-body">
+                        <h3 class="request-title">{{ req.boarding_name }}</h3>
+                        <div class="request-location"><i class="fa-solid fa-location-dot"></i> {{ req.location }}</div>
+                        
+                        <div class="info-row-item">
+                            <span class="info-label">Requested Dates</span>
+                            <span class="info-value">{{ req.visit_dates }}</span>
+                        </div>
+                        <div class="info-row-item">
+                            <span class="info-label">Monthly Rent</span>
+                            <span class="info-value" style="color: #7c3aed;">LKR {{ "{:,.0f}".format(req.monthly_rent|float) if req.monthly_rent else '0' }}</span>
+                        </div>
+                        <div class="info-row-item">
+                            <span class="info-label">Owner</span>
+                            <span class="info-value">{{ req.owner_name }}</span>
+                        </div>
+
+                        {% if req.status == 'accepted' %}
+                        <div class="owner-contact-box" style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 10px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 11px; color: var(--text-light);">Owner Phone</div>
+                                <div style="font-weight: 700; font-size: 13px; color: var(--text-dark);">{{ req.owner_phone }}</div>
+                            </div>
+                            <a href="tel:{{ req.owner_phone }}" style="background: #22c55e; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none;"><i class="fa-solid fa-phone"></i></a>
+                        </div>
+                        {% elif req.status == 'pending' %}
+                        <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 10px; margin-top: 15px; font-size: 12px; color: #b45309; text-align: center;">
+                            <i class="fa-solid fa-hourglass-half"></i> Waiting for owner confirmation
+                        </div>
+                        {% else %}
+                        <a href="/" class="btn-solid" style="width: 100%; display: block; text-align: center; text-decoration: none; padding: 8px; margin-top: 15px; font-size: 12px;">
+                            <i class="fa-solid fa-magnifying-glass"></i> Find Other Boardings
+                        </a>
+                        {% endif %}
                     </div>
                 </div>
-            </div>
-
-            <!-- Request Card 2 (Pending) -->
-            <div class="request-card">
-                <div class="request-card-header">
-                    <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="request-card-img" alt="Green View Annexe">
-                    <div class="status-badge-floating badge-pending">
-                        <i class="fa-solid fa-clock"></i> Pending Approval
-                    </div>
+                {% endfor %}
+            {% else %}
+                <div style="grid-column: 1 / -1; text-align: center; padding: 50px; background: white; border-radius: 16px; border: 1px dashed #cbd5e1;">
+                    <i class="fa-solid fa-folder-open" style="font-size: 40px; color: #cbd5e1; margin-bottom: 15px;"></i>
+                    <h3 style="color: var(--text-dark); margin-bottom: 5px;">No Visit Requests</h3>
+                    <p style="color: var(--text-light); font-size: 14px; margin-bottom: 20px;">You haven't requested to visit any boardings yet.</p>
+                    <a href="/student" class="btn-primary" style="text-decoration: none; padding: 10px 20px;"><i class="fa-solid fa-magnifying-glass"></i> Find Boardings</a>
                 </div>
-                <div class="request-card-body">
-                    <h3 class="request-title">Green View Student Annexe</h3>
-                    <div class="request-location"><i class="fa-solid fa-location-dot"></i> Mihintale Town</div>
-
-                    <div class="info-row-item">
-                        <span class="info-label">Visit Date</span>
-                        <span class="info-value">Sep 07, 2026</span>
-                    </div>
-                    <div class="info-row-item">
-                        <span class="info-label">Monthly Rent</span>
-                        <span class="info-value" style="color: #7c3aed;">LKR 9,500</span>
-                    </div>
-                    <div class="info-row-item">
-                        <span class="info-label">Owner</span>
-                        <span class="info-value">Mr. Kamal Perera</span>
-                    </div>
-
-                    <div style="background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 10px; margin-top: 15px; font-size: 12px; color: #b45309; text-align: center;">
-                        <i class="fa-solid fa-hourglass-half"></i> Waiting for owner confirmation
-                    </div>
-                </div>
-            </div>
-
-            <!-- Request Card 3 (Rejected) -->
-            <div class="request-card">
-                <div class="request-card-header">
-                    <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" class="request-card-img" alt="Royal Hostel">
-                    <div class="status-badge-floating badge-rejected">
-                        <i class="fa-solid fa-circle-xmark"></i> Request Declined
-                    </div>
-                </div>
-                <div class="request-card-body">
-                    <h3 class="request-title">Royal Student Hostel</h3>
-                    <div class="request-location"><i class="fa-solid fa-location-dot"></i> Mihintale</div>
-
-                    <div class="info-row-item">
-                        <span class="info-label">Visit Date</span>
-                        <span class="info-value">Sep 04, 2026</span>
-                    </div>
-                    <div class="info-row-item">
-                        <span class="info-label">Monthly Rent</span>
-                        <span class="info-value" style="color: #7c3aed;">LKR 12,000</span>
-                    </div>
-                    <div class="info-row-item">
-                        <span class="info-label">Reason</span>
-                        <span class="info-value" style="color: #ef4444;">Fully Occupied</span>
-                    </div>
-
-                    <a href="/" class="btn-solid" style="width: 100%; display: block; text-align: center; text-decoration: none; padding: 8px; margin-top: 15px; font-size: 12px;">
-                        <i class="fa-solid fa-magnifying-glass"></i> Find Other Boardings
-                    </a>
-                </div>
-            </div>
-
+            {% endif %}
         </div>
     </div>
 </div>
-
-
 </body>
 </html>

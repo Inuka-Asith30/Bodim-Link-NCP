@@ -570,7 +570,35 @@ def boarding_details(id):
 
 @app.route('/student-requests')
 def student_requests():
-    return render_template('student_requests.html')
+    if 'user_id' not in session or session.get('user_role') != 'student':
+        return redirect(url_for('login'))
+        
+    student_id = session['user_id']
+    connection = get_db_connection()
+    requests_data = []
+    
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                # We need boarding name, image, location, rent, owner phone, owner name, status, dates
+                sql = '''
+                    SELECT v.id, v.visit_dates, v.status, 
+                           b.name as boarding_name, b.location as location, b.monthly_rent, b.image_path,
+                           u.name as owner_name, u.phone as owner_phone
+                    FROM visit_requests v
+                    JOIN boardings b ON v.boarding_id = b.id
+                    JOIN users u ON v.owner_id = u.id
+                    WHERE v.student_id = %s
+                    ORDER BY v.created_at DESC
+                '''
+                cursor.execute(sql, (student_id,))
+                requests_data = cursor.fetchall()
+        except Exception as e:
+            pass
+        finally:
+            connection.close()
+
+    return render_template('student_requests.html', requests_data=requests_data)
 
 
 # ----------------------------------------------------
