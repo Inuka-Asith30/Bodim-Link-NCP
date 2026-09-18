@@ -35,8 +35,13 @@
             </div>
         </div>
 
-        <h2 style="color: #1e293b; font-size: 20px; margin-bottom: 20px;">Pending Owner Verifications</h2>
-        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="color: #1e293b; font-size: 20px; margin: 0;">Pending Owner Verifications</h2>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="searchOwnersInput" placeholder="Search by name, email or phone..." style="padding: 8px 15px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; width: 250px; outline: none;">
+                <button onclick="filterTable('searchOwnersInput', 'ownersTable')" style="padding: 8px 15px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; transition: background 0.3s;"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+            </div>
+        </div>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
             {% for category, message in messages %}
@@ -49,7 +54,7 @@
             {% endif %}
         {% endwith %}
 
-        <table class="admin-table">
+        <table class="admin-table" id="ownersTable">
             <thead>
                 <tr>
                     <th>Owner Name</th>
@@ -88,9 +93,15 @@
             </tbody>
         </table>
         
-        <h2 style="color: #1e293b; font-size: 20px; margin-top: 40px; margin-bottom: 20px;">Pending Boardings</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; margin-bottom: 20px;">
+            <h2 style="color: #1e293b; font-size: 20px; margin: 0;">Pending Boardings</h2>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="searchBoardingsInput" placeholder="Search by location, owner or details..." style="padding: 8px 15px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; width: 250px; outline: none;">
+                <button onclick="filterTable('searchBoardingsInput', 'boardingsTable')" style="padding: 8px 15px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; transition: background 0.3s;"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+            </div>
+        </div>
         
-        <table class="admin-table">
+        <table class="admin-table" id="boardingsTable">
             <thead>
                 <tr>
                     <th>Boarding Details</th>
@@ -133,6 +144,34 @@
     </div>
 </div>
 
+<script>
+    function filterTable(inputId, tableId) {
+        const input = document.getElementById(inputId).value.toLowerCase();
+        const table = document.getElementById(tableId);
+        const trs = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+        for (let i = 0; i < trs.length; i++) {
+            // Ignore the "No items found" row if present
+            if (trs[i].getElementsByTagName('td').length === 1) continue;
+            
+            const textContent = trs[i].textContent.toLowerCase();
+            if (textContent.includes(input)) {
+                trs[i].style.display = "";
+            } else {
+                trs[i].style.display = "none";
+            }
+        }
+    }
+
+    // Real-time search as you type
+    document.getElementById('searchOwnersInput').addEventListener('keyup', function(e) {
+        filterTable('searchOwnersInput', 'ownersTable');
+    });
+
+    document.getElementById('searchBoardingsInput').addEventListener('keyup', function(e) {
+        filterTable('searchBoardingsInput', 'boardingsTable');
+    });
+</script>
 
 </body>
 </html>
