@@ -455,7 +455,7 @@ def manage_students():
     return render_template('manage_students.html', students=students)
 
 @app.route('/admin/statistics')
-def admin_statistics():
+def admin_stats_page():
     if 'user_id' not in session or session.get('user_role') != 'admin':
         return redirect(url_for('login'))
         
