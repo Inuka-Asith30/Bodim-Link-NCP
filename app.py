@@ -454,6 +454,40 @@ def manage_students():
             
     return render_template('manage_students.html', students=students)
 
+@app.route('/admin/statistics')
+def admin_statistics():
+    if 'user_id' not in session or session.get('user_role') != 'admin':
+        return redirect(url_for('login'))
+        
+    connection = get_db_connection()
+    total_students = 0
+    verified_owners = 0
+    active_listings = 0
+    
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT COUNT(*) as count FROM users WHERE role = 'student'")
+                result = cursor.fetchone()
+                total_students = result['count'] if result else 0
+                
+                cursor.execute("SELECT COUNT(*) as count FROM users WHERE role = 'owner' AND status = 'verified'")
+                result = cursor.fetchone()
+                verified_owners = result['count'] if result else 0
+                
+                cursor.execute("SELECT COUNT(*) as count FROM boardings WHERE approval_status = 'approved'")
+                result = cursor.fetchone()
+                active_listings = result['count'] if result else 0
+        except Exception as e:
+            print(f"Database error in statistics: {e}")
+        finally:
+            connection.close()
+            
+    return render_template('statistics.html', 
+                           total_students=total_students, 
+                           verified_owners=verified_owners, 
+                           active_listings=active_listings)
+
 @app.route('/admin/delete_user/<int:id>')
 def delete_user(id):
     if 'user_id' not in session or session.get('user_role') != 'admin':
