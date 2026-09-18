@@ -48,7 +48,15 @@
         {% endwith %}
 
         <!-- Students Section -->
-        <table class="admin-table">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="color: #1e293b; font-size: 20px; margin: 0;"><i class="fa-solid fa-user-graduate" style="color: var(--primary);"></i> Students List</h2>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="searchInput" placeholder="Search by name, email or phone..." style="padding: 8px 15px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; width: 250px; outline: none;">
+                <button onclick="filterTable()" style="padding: 8px 15px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; transition: background 0.3s;"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+            </div>
+        </div>
+
+        <table class="admin-table" id="usersTable">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -84,6 +92,31 @@
 
     </div>
 </div>
+
+<script>
+    function filterTable() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const table = document.getElementById('usersTable');
+        const trs = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+        for (let i = 0; i < trs.length; i++) {
+            // Ignore the "No students found" row if present
+            if (trs[i].getElementsByTagName('td').length === 1) continue;
+            
+            const textContent = trs[i].textContent.toLowerCase();
+            if (textContent.includes(input)) {
+                trs[i].style.display = "";
+            } else {
+                trs[i].style.display = "none";
+            }
+        }
+    }
+
+    // Optional: Real-time search as you type
+    document.getElementById('searchInput').addEventListener('keyup', function(e) {
+        filterTable();
+    });
+</script>
 
 </body>
 </html>
