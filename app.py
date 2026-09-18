@@ -414,29 +414,45 @@ def reject_boarding(id):
             
     return redirect(url_for('admin_dashboard'))
 
-@app.route('/admin/manage_users')
-def manage_users():
+@app.route('/admin/manage_owners')
+def manage_owners():
     if 'user_id' not in session or session.get('user_role') != 'admin':
         return redirect(url_for('login'))
         
     connection = get_db_connection()
     owners = []
-    students = []
     
     if connection:
         try:
             with connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM users WHERE role = 'owner' ORDER BY created_at DESC")
                 owners = cursor.fetchall()
-                
-                cursor.execute("SELECT * FROM users WHERE role = 'student' ORDER BY created_at DESC")
-                students = cursor.fetchall()
         except Exception as e:
-            print(f"Database error in manage users: {e}")
+            print(f"Database error in manage owners: {e}")
         finally:
             connection.close()
             
-    return render_template('manage_users.html', owners=owners, students=students)
+    return render_template('manage_owners.html', owners=owners)
+
+@app.route('/admin/manage_students')
+def manage_students():
+    if 'user_id' not in session or session.get('user_role') != 'admin':
+        return redirect(url_for('login'))
+        
+    connection = get_db_connection()
+    students = []
+    
+    if connection:
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM users WHERE role = 'student' ORDER BY created_at DESC")
+                students = cursor.fetchall()
+        except Exception as e:
+            print(f"Database error in manage students: {e}")
+        finally:
+            connection.close()
+            
+    return render_template('manage_students.html', students=students)
 
 @app.route('/admin/delete_user/<int:id>')
 def delete_user(id):
@@ -457,7 +473,7 @@ def delete_user(id):
         finally:
             connection.close()
             
-    return redirect(url_for('manage_users'))
+    return redirect(request.referrer or url_for('admin_dashboard'))
 
 @app.route('/my_listings')
 def my_listings():
